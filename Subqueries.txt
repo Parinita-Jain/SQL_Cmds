@@ -1,0 +1,28 @@
+
+#---------------------------------------------------
+
+
+# subqueries with select ,update ,delete and insert
+drop table employee_sq;
+create table employee_sq(emp_id int,emp_name varchar(20),emp_age int,gender varchar(20),emp_doj date,
+emp_dept varchar(20),emp_city varchar(20),emp_salary int);
+
+insert into employee_sq(emp_id,emp_name,emp_age,gender,emp_doj,
+emp_dept,emp_city,emp_salary) values
+(106,"Ammy",35,"F","2014-12-20","IT","Seatle",83000),
+(107,"Jack",40,"M","2012-07-14","Finance","Houston",103000),
+(108,"Angela",36,"F","2007-02-04","Tech","New York",113000),
+(109,"Marcus",25,"M","2010-07-18","HR","Boston",90000),
+(110,"David",34,"M","2009-08-25","Product","Miami",78000),
+(111,"Rose",28,"F","2011-02-27","Tech","Chicago",63000);
+create table employee_copy(emp_id int,emp_name varchar(20),emp_age int,gender varchar(20),emp_doj date,
+emp_dept varchar(20),emp_city varchar(20),emp_salary int);
+
+insert into employee_copy(emp_id,emp_name,emp_age,gender,emp_doj,
+emp_dept,emp_city,emp_salary) values
+(106,"Ammy",35,"F","2014-12-20","IT","Seatle",83000),
+(107,"Jack",40,"M","2012-07-14","Finance","Houston",103000),
+(108,"Angela",36,"F","2007-02-04","Tech","New York",113000),
+(109,"Marcus",25,"M","2010-07-18","HR","Boston",90000),
+(110,"David",34,"M","2009-08-25","Product","Miami",78000),
+(111,"Rose",28,"F","2011-02-27","Tech","Chicago",63000);
