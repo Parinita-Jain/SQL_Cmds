@@ -1,5 +1,11 @@
-A database is a collection of organised data that can be easily stored, sorted, retrieved and searched. 
 
+#8.Write a query to show last day of last month
+
+select last_day(date_add(now(), interval 12-month(now()) month)) as last_month_date;
+
+__________________________-----
+
+A database is a collection of organised data that can be easily stored, sorted, retrieved and searched. 
 
 
 What is MySQL?
@@ -38,7 +44,8 @@ It provides commands:
 
 The difference between file processing system and database management system is as follow:
 
-A file processing system is a collection of programs that store and manage files in computer hard-disk. On the other hand, A database management system is collection of programs that enables to create and maintain a database.
+A file processing system is a collection of programs that store and manage files in computer hard-disk. 
+On the other hand, A database management system is collection of programs that enables to create and maintain a database.
 
 File processing system has more data redundancy, less data redundancy in dbms.
 
@@ -404,592 +411,515 @@ the SQL database tables:
 7. SQL ANY operator
 8. SQL LIKE operator
 
-
-
-
 show databases;
-create database sl_lab;
-show databases;
-drop database sl_lab;
-show databases;
-create database sql_lab;
-use sql_lab;
+create database mysql_8_10;
+use mysql_8_10;
 
-#----------------Data Types______________________
+create table student_info
+(roll_no tinyint,attendance bit,
+pocket_money smallint);
 
-create table student_info(roll_no TINYINT, attendance BIT,stud_parents_monthly_income smallint);
-desc student_info;
-# we have not specified size, by default size is given.
-
-insert into student_info values(1,0,32766);
-select * from student_info;
-insert into student_info values(256,2,40000); # out of range error
-select * from student_info; # converted nearest value is inserted.
-
-#Creating a new table with bigint
-
-create table product(product_id int,product_copies bigint,product_price decimal(3,2));
-insert into product values(2147483648,9223372036854775807,7.8);
-select * from product;
-
-# Approximate numeric datatype- float and real. 
-
-create table approx_numeric_datademo(float_nos FLOAT, real_nos real);
-insert into approx_numeric_datademo values(4.566666678545454565457866666669,-7888986898587.000);
-select * from approx_numeric_datademo;
-
-create table date_demo(date_column DATE,time_column TIME,date_time_column DATETIME);
-desc date_demo;
-
-insert into date_demo values('2022-03-28','20:42:01','2022-03-28 20:42:01');
-select * from date_demo;
-create table student(
-roll int,
-name varchar(20),
-address varchar(100),
-contact int(10),
-marks int);
-desc student;
-insert into student values(1,'Python','Pune','123456789',56);
-insert into student values(2,'Java','Mumbai','123456789',95);
-insert into student values(3,'HTML','Nasik','789787878',85);
-insert into student values(4,'C','Pune','1238978978',56);
-insert into student values(5,'Python','Nasik','67897878',56);
-select * from student;
-select name,address from student;
-select * from student where roll=5;
-select * from student where marks<90;
-select * from student where address like "%Pune%";
-select * from student where address like "_a%";   # All the names with second letter a are printed
-select * from student where marks<90 and marks>50;
-select * from student where marks between 50 and 90;
-select * from student where  roll=1 or roll=2;
-select * from student where roll in (1,2);
-select distinct address from student;
-select * from student order by marks;
-select * from student order by marks desc;
-select * from student where address='Pune' order by marks;
-select * from student where address='Pune' order by marks limit 1;
-select * from student order by marks desc limit 1,2;
-select * from student limit 3;
-select * from student where address is null;
-select * from student where address is  not null;
-drop table student;
 show tables;
-#---------------------------------------------------constraints-----------
-create table student
-    (
-     id tinyint(3) unique,
-     name varchar(10) not null,
-     marks decimal(6,2),
-     dateofbirth date,
-     course varchar(10)
-     );
-insert into student values(1,'harry',45,null,null);
-select * from student;
-insert into student values(1,'harry',45,null,null);
-desc student;
-insert into student values(null,'harry',45,null,null);
-select * from student;
-insert into student values(1,'harry',45,null,null);
-insert into student values(null,'harry',45,null,null);
-select * from student;
-drop table student;
-create table student
-     (
-     id tinyint(3) not null unique,
-     name varchar(10) not null,
-     marks decimal(6,2),
-     dateofbirth date,
-     course varchar(10)
-     );
-insert into student values(1,'harry',45,null,null);
-insert into student values(1,'harry',45,null,null);
-insert into student values(null,'harry',45,null,null);
-desc student;
-drop table student;
-create table student
-    (
-     id tinyint(3) not null unique,
-     name varchar(10) not null,
-     marks decimal(6,2),
-     dateofbirth date not null unique,
-     course varchar(10)
-     );
-insert into student values(1,'harry',45,null,null);
-insert into student values(1,'harry',45,'1990-09-09',null);
-insert into student values(2,'harry',45,'1990-09-09',null);
-insert into student values(2,'harry',45,'1990-09-10',null);
-drop table student;
-create table student
-    (
-     id tinyint(3) not null unique,
-     name varchar(10) not null,
-     marks decimal(6,2),
-     dateofbirth date not null unique,
-     course varchar(10)
-     );
-insert into student values(1,'harry',45,null,null);
-insert into student values(1,'harry',45,'1990-09-09',null);
-insert into student values(2,'harry',45,'1990-09-09',null);
-insert into student values(2,'harry',45,'1990-09-10',null);
-desc student;
-drop table student;
 
-# primary key with autoincrement
-create table teacher(id int primary key auto_increment,
-name text,
-contact text,
-UNIQUE(name(20)));
-alter table teacher add unique(contact(10));
-desc teacher;
+desc student_info;
 
-insert into teacher value(1,"ABC","1234566780");
-insert into teacher(name, contact) values("PQR","3543857980");
-insert into teacher(name, contact) values("bhu","1244347894");
-insert into teacher(name, contact) values("adfd","1234356626");
-insert into teacher(name, contact) values("vbcmxn","6529897878");
+insert into student_info values(134,4,25000);
+
+select * from student_info;
+insert into student_info values('a',0,250);
+
+select * from student_info;
+
+create table product_d
+(id int,copies bigint,price decimal(5,2));
+
+show tables;
+
+desc product_d;
+insert into product_d values
+(9876543210,9999999999,999.99);
+select * from product_d;
+insert into product_d values 
+(12345,83763867639,88888888.888888);
+select * from product_d;
+insert into product_d values 
+(12345,83763867639,88867);
+select * from product_d;
+insert into product_d values 
+(12345,83763867639,888.67);
+select * from product_d;
+
+create table f_datatype(id float,re real);
+insert into f_datatype values
+(5678634867857.6578468,7668946498.74897689);
+select * from f_datatype;
+insert into f_datatype values
+(7.6578468,8.74897689);
+select * from f_datatype;
+desc f_datatype;
+
+create table dt
+(dt date,ti time,dt_ti datetime);
+insert into dt values
+('2023-02-22','09:44:00',
+'2023-02-22 09:44:00');
+select * from dt;
+
+create table student_c
+(sname char(10),
+svname varchar(20));
+desc student_c;
+insert into student_c values
+("ABC","DEF");
+select * from student_c;
+
+#-------------------------------------------23-2--------------------------------------------------------
+
+create table student_demo(
+roll int, suject varchar(20),addr varchar(20),marks int);
+
+desc student_demo;
+
+insert into student_demo values (1,"Python","Pune",56);
+select * from student_demo;
+
+insert into student_demo values (2,"Java","Mumbai",95),
+(3,"HTML","Nasik",85),(4,"C","Pune",56),
+(5,"Python","Nasik",50);
+select * from student_demo;
+insert into student_demo values(6,"Django","Andheri",99),
+(7,"JavaScript","Banglore",85);
+
+insert into student_demo values(8,null,"Pune",null);
+select * from student_demo;
+
+insert into student_demo(roll,addr) values(9,"Delhi"),
+(10,"Mumbai");
+select * from student_demo;
+insert into student_demo values(11,"Django","Andheri",78),
+(12,"JavaScript","Banglore",45),(13,"Python","Andheri",86),
+(14,"Python","Pune",96);
+
+select * from student_demo;
+select roll,marks from student_demo;
+
+select * from student_demo where roll=5; 
+
+select suject,marks from student_demo where roll=6;
+
+select * from student_demo where marks<90;
+
+select * from student_demo where marks<90 and marks>50;
+select * from student_demo where marks>50 and marks<90;
+select * from student_demo where marks between 50 and 90;
+
+#select * from student_demo where marks between 90 and 50;
+select * from student_demo where roll=1 or roll=2;
+
+select * from student_demo where roll in(1,2);
+
+select addr from student_demo;
+select distinct addr from student_demo;
+
+select distinct addr from student_demo where addr like "%i";
 
 
-desc teacher;
+select distinct addr from student_demo where addr like "A%i";
+select distinct addr from student_demo where addr like "M%";
+select distinct addr from student_demo where addr like "m%";
 
-select * from teacher;
+select distinct addr from student_demo where addr like "_____i";
 
-# primary key without autoincrement.
-create table student
-    (
-     id tinyint(3) primary key,
-     name varchar(10) not null,
-     marks decimal(6,2),
-     dateofbirth date not null unique,
-     course varchar(10)
-     );
-desc student;
-insert into student values(1,'harry',45,null,null);
-insert into student values(1,'harry',45,null,null);
-insert into student values(2,'harry',45,'1990-09-09',null);
-insert into student values(2,'harry',45,'1990-09-09',null);
-insert into student values(null,'harry',45,'1990-09-09',null);
-drop table student;
-#---------we cannot have 2 primary keys in a table.
-create table student
-     (
-     id tinyint(3) primary key,
-     name varchar(10) not null,
-     marks decimal(6,2),
-     dateofbirth date primary key,
-     course varchar(10)
-     );
-create table student
-    (
-	 id tinyint(3),
-     name varchar(10) not null,
-     marks decimal(6,2),
-     dateofbirth date not null,
-     course varchar(10),
-     primary key(id),
-     unique(dateofbirth)
-     );
-desc student;
+select distinct addr from student_demo where addr like"_u%";
 
-drop table student;
+select roll,marks from student_demo;
 
-desc student;
-#------------------------------------------------enum
-drop table student;
-create table student
-     (
-     id tinyint(3) primary key,
-     name varchar(10) not null,
-     marks decimal(6,2),
-     dateofbirth date not null unique,
-     course enum('java','python','php')
-     );
-desc student;
-insert into student values(1,'harry',45,'1990-09-09','java');
-insert into student values(1,'harry',45,'1990-09-09','java');
-select * from student;
-insert into student values(2,'harry',45,'1990-09-08','python');
-select * from student;
-insert into student values(3,'harry',45,'1991-09-08','html');
+select roll,marks from student_demo order by marks;
 
-select * from student;
-insert into student values(4,'ron',45,'1992-09-08','java,python');
-select * from student;
-#---------------------------------------------------set
-drop table student;
-create table student
-     (
-     id tinyint(3) primary key,
-     name varchar(10) not null,
-	 marks decimal(6,2),
-     dateofbirth date not null unique,
-     course set('java','python','php')
-     );
-     
 
-insert into student values(1,'harry',45,'1990-09-09','java');
-insert into student values(2,'harry',45,'1990-09-08','python');
-select * from student;
-insert into student values(3,'harry',45,'1991-09-08','html');
-select * from student;
-insert into student values(4,'ron',45,'1992-09-08','java,python');
-select * from student;
-insert into student values(5,'ron',45,'1996-09-08','python,html');
-select * from student;
-desc student;
-drop table student;
-#----------------------------------------------------foreign key
-drop table customers;
-drop table orders;
-create table customers(
+select roll,marks from student_demo order by marks desc;
+select * from student_demo order by marks desc limit 1;
+select addr from student_demo order by marks desc limit 3;
+select addr from student_demo order by marks desc limit 1,3;
+
+select * from student_demo where marks is null;
+select * from student_demo order by marks;
+select * from student_demo where marks is not null;
+select * from student_demo where marks is not null order by marks 
+limit 1;
+
+#------------------------------------------27-2-------------------------------------
+
+#constraints------
+create table unique_c
+( id int unique,
+  name varchar(20),
+  marks decimal(6,2));
+  
+  insert into unique_c values(1,"Harry",89.99);
+  select * from unique_c;
+  insert into unique_c values(2,"Tom",79.99);
+  select * from unique_c;
+ insert into unique_c values(null,"Tom",79.99); 
+ select * from unique_c;
+ insert into unique_c values(null,"Jerry",90.99);
+ select * from unique_c;
+ insert into unique_c values(0,"Tom",79.99); 
+ select * from unique_c;
+ insert into unique_c values(0,"Jerry",90.99);
+  select * from unique_c;
+  
+  create table null_c
+  (id int not null,
+  name varchar(20),
+  marks decimal(6,2));
+  
+  insert into null_c values(null,"Tom",79.99); 
+  insert into null_c values(0,"Tom",79.99); 
+  select * from null_c;
+  insert into null_c values(0,"Tom",79.99);
+   select * from null_c;
+  
+  #drop table unique_null_c;
+  create table unique_null_c
+  (id int not null unique,
+  name varchar(20),
+  marks decimal(6,2));
+   insert into unique_null_c values(null,"Tom",79.99); 
+   insert into unique_null_c values(0,"Tom",79.99);
+   select * from unique_null_c;
+  insert into unique_null_c values(0,"Tom",79.99);
+   select * from unique_null_c;
+   
+   create table primary_c
+  (id int primary key ,
+  name varchar(20),
+  marks decimal(6,2));
+insert into primary_c values(null,"Tom",79.99);
+insert into primary_c values(0,"Tom",79.99);
+select * from primary_c;
+insert into primary_c values(0,"Tom",79.99);
+
+create table p_u_nn_c
+  (id int primary key ,
+  name varchar(20) not null unique,
+  marks decimal(6,2) not null unique,
+  addr varchar(20) not null unique);
+  
+ create table pr_u_nn_c
+  (id int primary key ,
+  name varchar(20) primary key,
+  marks decimal(6,2) not null unique,
+  addr varchar(20) not null unique); 
+  
+  create table a_c
+  ( id int primary key auto_increment,
+  name varchar(20));
+insert into a_c values(1,"Harry");
+insert into a_c(name) values("Tom"),("Jerry"),("Bob");
+select * from a_c;
+
+create table enum_c
+( id int primary key auto_increment,
+ course enum("java","python","ML")
+);
+insert into enum_c values(1,"java");
+select * from enum_c;
+insert into enum_c values(2,"excel");
+select * from enum_c;
+insert into enum_c values(3,"java,python"); #
+select * from enum_c;
+
+#-----------set--------------------
+
+create table set_c
+( id int primary key auto_increment,
+ course set("java","python","ML")
+);
+insert into set_c values(1,"java");
+select * from set_c;
+insert into set_c values(2,"excel");
+select * from set_c;
+insert into set_c values(3,"java,python"); #
+select * from set_c;
+
+#----------------------check------------
+
+create table c_c(
 id int not null,
-name varchar(20) not null,
+name varchar(20),
+age int,
+constraint chk_c check(age>=18)
+);
+
+desc c_c;
+insert into c_c values(1,"Harry",20);
+select * from c_c;
+insert into c_c values(2,"Harry",18);
+select * from c_c;
+insert into c_c values(3,"Harry",17);
+select * from c_c;
+
+#------------------------default-------------
+create table d_c(
+id int not null,
+name varchar(20),
+age int,
+city varchar(20) default "Mumbai"
+);
+insert into d_c values(1,"Harry",20,"Banglore");
+select * from d_c;
+insert into d_c values(2,"Harry",20,null);
+select * from d_c;
+insert into d_c(id,name,age) values(3,"Harry",20);
+select * from d_c;
+
+
+#------------------------28-2-------------------------------
+# foreign key constraints----
+create table customer_fk
+(id int not null,
+name varchar(20),
 primary key(id));
 
+create table orders_fk
+(id int not null,
+c_id int);
 
-create table orders(
-id int not null,
-customer_id int);
+desc customer_fk;
+desc orders_fk;
 
-alter table orders add constraint cust_f foreign key(customer_id) references customers(id);
+alter table orders_fk add constraint cust_f foreign key(c_id) references customer_fk(id);
+desc orders_fk;
 
-insert into customers values(1,"A");
-insert into customers values(2,"A");
-insert into customers values(3,"A");
-insert into customers values(4,"A");
+insert into customer_fk values(1,"A"),(2,"A"),(3,"A"),(4,"A");
 
-insert into orders values(10,1);
-insert into orders values(10,2);
-insert into orders values(10,3);
-insert into orders values(10,3);
+select * from customer_fk;
 
-select orders.id, orders.customer_id from orders;
-delete from customers where id=4;
-delete from customers where id=3;
-select * from orders;
-select * from customers;
+insert into orders_fk values(10,1),(10,2),(10,3),(10,3);
 
-alter table orders drop foreign key cust_f;
+select * from orders_fk;
+insert into orders_fk values(10,5); #-------------error
+insert into customer_fk values(5,"A");
+select * from customer_fk;
+insert into orders_fk values(10,5);
+select * from orders_fk;
+delete from customer_fk where id=5;#-----------error
+delete from customer_fk where id=4;
+select * from customer_fk;
+delete from customer_fk where id=5;
+
+delete from orders_fk where c_id=5;
+select * from orders_fk;
+delete from customer_fk where id=5;
+select * from customer_fk;
 
 
-#----------------------------------------Alter
-create table product_demo(product_id int, product_name varchar(20), product_price int);
+#-------------------------------------indexes-----------------------------
+
+select * from d_c;
+select name from d_c where id=1;
+create index n_i on d_c(name);
+select name from d_c where id=1;
+
+#-------------------------------------------------------------3-8---------------------------------
+create table product_demo
+( id int,
+name varchar(20),
+price int
+);
+
 desc product_demo;
-# i want to rename tablename
 
 alter table product_demo rename to product1;
-desc product1;
-check table product1;
-# adding new col in table,let's say product_category
-
-alter table product1 add column product_category varchar(20) after product_name;
+desc product_demo;
 desc product1;
 
-# modify size of datatype ormodify col datatype
-
-alter table product1 modify product_name varchar(15);
+alter table product1 modify name varchar(30);
 desc product1;
 
-#dropping col
-alter table product1 drop product_category;
-desc product1;
-#------drop deletes entire structure of table. Truncate deletes rows of table.
+insert into product1 values(1,"A",100),(2,"B",200);
 
+alter table product1 add column email varchar(100);
+desc product1;
+alter table product1 drop column email;
+desc product1;
+
+ALTER TABLE product1 change column id pid int;
+
+desc product1;
+select * from product1;
 truncate table product1;
+select * from product1;
 desc product1;
 
 drop table product1;
+select * from product1;
 desc product1;
 
-
-#Constraints are placed on cols.-------------------how to add or drop constraints 
-
-drop table course_p;
-create table course_p
-(courseid int(3),
-coursename varchar(20),
-fees decimal(10,2));
-alter table course_p
-add constraint primary key(courseid);
-
-alter table course_p
-drop primary key;
-
-alter table course_p
-add constraint primary key(courseid);#------------add primary key again for foreign key constraints.
-drop table student;
-create table student
-(studid int(3) primary key,
-sname varchar(20),
-cid int(3) not null
+create table product1
+( id int,
+name varchar(20),
+price int
 );
 
-alter table student
-add constraint studcourse foreign key(cid) references course_p(courseid);
+desc product1;
+alter table product1 add constraint primary key(id);
+desc product1;
 
-alter table student drop foreign studcourse;
+alter table product1 drop primary key;
+desc product1;
 
-#-------------Data Query Language------------------------
-# select
+create table course_p
+( id int primary key,
+ name varchar(20),
+ fees decimal(6,2)
+);
+create table stud_p
+( id int primary key,
+sname varchar(20),
+cid int not null
+);
 
+alter table stud_p add constraint stud_f
+foreign key(cid) references course_p(id);
+desc stud_p;
+insert into course_p values(100,"Tom",120.56);
+insert into stud_p values(1,"A",100); 
+delete from course_p where id=100;
+delete from stud_p where cid=100;
+select * from stud_p;
+delete from course_p where id=100;
+select * from course_p;
 
+alter table stud_p drop foreign key stud_f;
+desc stud_p;
+insert into stud_p values(1,"A",100); 
 
-#Arithmetic and Logical Operators : <,>,<=,>=,=
+#------------------------functions---------------
 
-#logical operator and,or not
+create table str_demo(f_name varchar(20),l_name varchar(20));
+insert into str_demo values("Tom","Jerry"),("jAmes","bonD"),
+("boB","Merry");
+select * from str_demo;
+select concat(f_name,' ',l_name) as Name from str_demo;
+select upper(f_name),lower(l_name) from str_demo;
+select f_name,length(f_name) as Name_Length
+from str_demo;
 
-create table employee(emp_id int primary key,emp_first_name varchar(20),emp_last_name varchar(20),
-emp_job_title varchar(20));
-insert into employee(emp_id,emp_first_name,emp_last_name,emp_job_title) values
-(1001,"Raj","Ambani","Architect"),
-(1002,"Rama","Birla","Data Scintist"),
-(1003,"Raja","Ambani","Data Engineer");
+select replace("Let us earn SQL","earn","learn") as Target;
 
-select * from employee;
+select substr("Let us 1earn SQL",14,3) as Target;
 
-select emp_id,emp_job_title,emp_last_name from employee;
-select * from employee where emp_id=1001;
-drop table bank_customer;
-create table bank_customer(cust_acc_no int primary key, cust_first_name varchar(20),
-cust_last_name varchar(20), cust_acc_bal int ,cust_credit_limit int,cust_job_title varchar(20));
+# math functions-----
+select round(12344.675,2);
+select round(12344.676,-2);
 
-desc bank_customer;
-
-insert into bank_customer(cust_acc_no, cust_first_name,
-cust_last_name, cust_acc_bal ,cust_credit_limit,cust_job_title)
-values (2005,"Raj","Ambani",130000,30000,"Architect"),
-(2006,"Rama","Birla",190000,40000,"Data Scientist"),
-(2007,"Roma","Ambani",890000,70000,"Data Engineer"),
-(2008,"Raja","Mehta",250000,50000,"Architect"),
-(2009,"Rajni","Ambani",680000,6000,"Architect")
-;
-select * from bank_customer;
-
-select cust_acc_no,cust_first_name from bank_customer where cust_acc_bal<200000;
-select cust_acc_no,cust_first_name from bank_customer where cust_acc_bal<680000 and
-cust_acc_bal>200000;
-select cust_acc_no,cust_first_name,cust_last_name from bank_customer where cust_credit_limit<68000 or
-cust_credit_limit>20000;
-select cust_first_name,cust_credit_limit+20000 as "revised_credit_lmit" from bank_customer;
-
-
-# Range operator
-select cust_acc_no,cust_first_name,cust_last_name from bank_customer where cust_credit_limit
-between 20000 and 68000;
-
-select cust_acc_no,cust_first_name,cust_last_name from bank_customer where cust_acc_no
-in(2006,2007,2005);
-
-select cust_acc_no,cust_first_name,cust_last_name from bank_customer where cust_last_name 
-like '__b%';
-select distinct cust_last_name from bank_customer;
-select * from bank_customer order by cust_acc_bal;
-select * from bank_customer order by cust_acc_bal desc;
-
-select * from bank_customer order by cust_acc_bal limit 2;
-select * from bank_customer order by cust_acc_bal limit 2,1;
-
-# case
-# ifcustomers bal is30000thenin remarks col bal is less or bal is ok. i.e. if-else
-# so using case expression
-select cust_acc_bal,case cust_acc_bal when 500000 then "Less Balance"
-else "Balance is fine " end as "Remarks"
-from bank_customer;
-create table Number(i int);
-insert into Number values(1),(2),(3),(4);
-select * from Number;
-select i*i 'Sq_of_i' from Number;
-
-
-# Functions
-
-
-create table Name(F_name varchar(20),L_name varchar(20));
-insert into Name values('Harry','Jerry'); 
-insert into Name values('Tom','Jerry'); 
-insert into Name values('Bob','Merry'); 
-select concat(F_name,L_name) 'Names' from Name;
-select concat(f_name,' ',l_name) 'Names' from Name;
-select * from Name;
-select f_name,upper(f_name) from Name;
-select f_name,lower(f_name) from Name;
-select f_name,length(f_name) from Name;
-select replace("Let us earn Python","earn","learn") as "Target";
-# substr starts from 1
-select substr("Let us learn Machine Learning",12,5);
-select substr("Let us learn Machine Learning",-14.5,5);
-
-# Math function
-
-select round(23.45343,2);
-
-
-select round(34323.6767,1);
-
-select round(34323.6767,-2);
-
-
-select truncate(34323.6767,2);
-
-select ceil(34323.6767);
-
-select floor(34323.6767);
+select truncate(12344.676,2);
+select ceil(125.1);
+select floor(125.1);
 
 select sqrt(81);
-
 select pow(2,3);
-
 select mod(29,2);
 
-select coalesce(null,1,2);
-select coalesce(null,null,2);
-select coalesce(null,null,null);
+select coalesce(null,null,null,1,null,2);
+select coalesce(null,null,null,null);
+
 select isnull(1*1);
-select isnull(1/0);
 select isnull(0/1);
-select if(12>13,'Yes','No');
-create table Number_(i int);
-insert into Number_ values(1),(2),(3),(4);
-select avg(i) from Number_;
-select max(i) from Number_;
-select min(i) from Number_;
-select sum(i) from Number_;
+select isnull(1/0);
 
-select greatest(2,45,6,88,3);
+#------------------------------3-9-------------------------------------------
 
-select least(2,45,6,88,3);
+create table num(n int);
+insert into num values(1),(2),(3),(4);
+select * from num;
+select sum(n) from num;
+select avg(n) from num;
+select min(n) from num;
+select max(n) from num;
 
+select sum(n) as Sum,avg(n) Avg,min(n) Min,max(n) Max 
+from num;
+select count(*) from num;
+select greatest(1,3,5,2,6,7);
+select least(1,3,5,2,6,7);
 
-#------Date
-
+#----------------Date-----
 select curdate();
 select now();
 select sysdate();
 select month(sysdate());
-select last_day('2022-02-12');
-
-select adddate(sysdate(),-2);
-
 select adddate(sysdate(),2);
+select adddate(sysdate(),-2);
+select date_add(sysdate(),interval 2 month);
+select datediff(sysdate(),'2020-12-09');
+select timestampdiff(day,'2020-12-09',sysdate());
 
-select datediff(sysdate(),'2020-12-10');
-select timestampdiff(day,'2020-12-10',sysdate());
-select timestampdiff(month,'2020-12-10',sysdate());
-
-select timestampdiff(year,'2020-12-10',sysdate());
 select date_format(sysdate(),'%m');
-
-#year (2-digits)
 select date_format(sysdate(),'%y');
-
-#year (4-digits)
 select date_format(sysdate(),'%Y');
-
-#abbrivated month
 select date_format(sysdate(),'%b');
-
-#full month
 select date_format(sysdate(),'%M');
-
-#day
+select date_format(sysdate(),'%Y');
 select date_format(sysdate(),'%d');
-
-#full weekday
 select date_format(sysdate(),'%W');
-
-#abbrivated weekday
 select date_format(sysdate(),'%a');
-
 select date_format(sysdate(),'%D');
+select date_format(sysdate(),'%D of the %M %Y,%W') as Date;
 
-select date_format(sysdate(),'%D of the %M, %Y, %W');
-
-select date_format(sysdate(),'%d-%m-%Y');
-
-#Only time
 select date_format(sysdate(),'%h:%i:%s %p');
 
-#---------------group by
+#------------------group by having------------
 
-create table emp_gp(emp_id int,emp_name varchar(20),emp_city varchar(20),emp_salary int);
-insert into emp_gp(emp_id,emp_name,emp_city,emp_salary) values 
-(1001,"Karthik","Thane",40000),
-(1002,"Selvi","Pune",50000),
-(1003,"Raj","Thane",55000),
-(1004,"Sarvana","Mumbai",56000),
-(1005,"Subha","Pune",20000),
-(1006,"Krishna","Mumbai",35000);
-select avg(emp_salary) from emp_gp;
-select count(*) from emp_gp;
-select max(emp_salary) from emp_gp;
-select min(emp_salary) as "Minimum Salary" from emp_gp;
-select sum(emp_salary) from emp_gp;
-select emp_city,count(emp_city) from emp_gp group by emp_city;
-select emp_city,emp_name,emp_salary from emp_gp having emp_salary>=35000;
-# do remember to include having colin select clause.
-
-
-
------------
-CREATE TABLE Employee(
-   EmployeeId int,
-   Salary int,
-   Department Varchar(20),
-  
+create table cust_gh(
+id int,fname varchar(20),lname varchar(20),age int,
+country varchar(20)
 );
 
-INSERT INTO Employee VALUES (1, 50000, 'Engineering');
-INSERT INTO Employee VALUES (2, 37000, 'HR');
-INSERT INTO Employee VALUES (3, 56000, 'Sales');
-INSERT INTO Employee VALUES (4, 43000, 'Management');
-INSERT INTO Employee VALUES (5, 90000, 'Engineering');
+insert into cust_gh values
+(1,"John","Doe",31,"USA"),
+(2,"Robert","Luna",22,"USA"),
+(3,"David","Robin",22,"UK"),
+(4,"John","Rain",25,"UK"),
+(5,"Betty","Doe",28,"UAE"),
+(6,"Alice","Wonderland",18,"USA"),
+(7,"John","Wick",60,"UK"),
+(8,"Andrew","Tate",45,"Romania"),
+(9,"Elena","Calyas",28,"Romania"),
+(10,"Ronaldo","Christiano",35,"UAE"),
+(11,"Linoel","Messi",35,"Argentina"),
+(12,"Kylian","Mbappe",23,"France");
 
-SELECT * FROM Employee;
+select * from cust_gh;
+select distinct(country) from cust_gh;
 
-#To Know the sum of salaries, we will write the query:
+select * from cust_gh group by country;
+select country,count(*) from cust_gh group by country;
+select country from cust_gh 
+group by country having avg(age)>25;
+select *  from cust_gh 
+group by country having age>avg(age);
+select avg(age) from cust_gh;
+select country,count(id) from cust_gh group by country
+having avg(age)>31 and count(id)>2;
+select country,count(id) from cust_gh
+where country="UAE" group by country
+having avg(age)>31 and count(id)=2;
 
-SELECT Department, sum(Salary) as Salary
-FROM employee
-GROUP BY department;  
+select country,avg(age) from cust_gh 
+where country like 'U%'
+group by country
+having avg(age)>23 order by avg(age);
 
-#Now if we need to display the departments where the sum of salaries is 50,000 or more. In this condition, we will use HAVING Clause.
+#--------------------------------------------------------3-13------------
 
-SELECT Department, sum(Salary) as Salary
-FROM employee
-GROUP BY department
-HAVING SUM(Salary) >= 50000;  
+#---------------------------------------------------
 
-#Suppose, a teacher wants to announce the toppers in class. For this, she decides to reward every student who scored more than 95%. 
-#We need to group the database by name and their percentage and find out who scored more than 95% in that year. 
-
-CREATE TABLE Student(
-   student Varchar(20),
-   percentage int
-);
-
-INSERT INTO Student VALUES ('Isha Patel', 98)
-INSERT INTO Student VALUES ('Harsh Das', 94)
-INSERT INTO Student VALUES ('Rachit Sha', 93)
-INSERT INTO Student VALUES ('Sumedha', 98)
-INSERT INTO Student VALUES ('Rahat Ali', 98)
-
-SELECT student, percentage
-FROM Student
-GROUP BY student, percentage
-HAVING percentage > 95;
-
-#we can also filter rows on multiple values using the HAVING clause. The HAVING clause also permits filtering rows using more than one aggregate condition.
-
-SELECT student  
-FROM Student
-WHERE percentage > 90
-GROUP BY student, percentage
-Having student like "R%" AND AVG(percentage) > 95;
-This query returns the students who have more percentage than 95 and the sum of percentage is less than 1000. 
--------------
 
 # subqueries with select ,update ,delete and insert
+#drop table employee_sq;
 create table employee_sq(emp_id int,emp_name varchar(20),emp_age int,gender varchar(20),emp_doj date,
 emp_dept varchar(20),emp_city varchar(20),emp_salary int);
 
@@ -1014,265 +944,701 @@ emp_dept,emp_city,emp_salary) values
 (111,"Rose",28,"F","2011-02-27","Tech","Chicago",63000);
 
 select * from employee_sq;
+select * from employee_copy;
+
 select max(emp_salary) from employee_sq;
+select emp_dept from employee_sq where emp_salary=113000;
+#select emp_dept from employee_sq where emp_salary=max(emp_salary);
+
 select emp_dept from employee_sq where emp_salary=(select max(emp_salary) from employee_sq);
-select emp_name,emp_dept from employee_sq where emp_salary=(select max(emp_salary) from employee_sq);
-select * from employee_sq where emp_salary=(select max(emp_salary) from employee_sq);
-# updation through subquery
 
-select emp_id from employee_sq where emp_age>=27;
+select * from employee_sq where emp_age>(select min(emp_age) from employee_sq);
+
+select emp_id,emp_salary from employee_sq where emp_age >28;
+
+update employee_sq set emp_salary=emp_salary+3000 where emp_id in(106,107,108,110);
+
+select emp_id,emp_salary from employee_sq where emp_age >28;
+
 update employee_sq set emp_salary=emp_salary+3000 where emp_id in
-(select emp_id from employee_copy where emp_age>=28);
+(select emp_id from employee_sq where emp_age >28);
+select emp_id,emp_salary from employee_sq where emp_age >28;
 
-delete from employee_sq where emp_id in (select emp_id from employee_copy where emp_age>=27);
+
+update employee_sq set emp_salary=emp_salary+3000 where emp_id in
+(select emp_id from employee_sq where emp_age >28);
+
+update employee_sq set emp_salary=emp_salary+3000 where emp_id in
+(select emp_id from employee_copy where emp_age >28);
+
+select emp_salary from employee_sq where emp_age >28;
+select emp_id from employee_copy where emp_age >28;
 select * from employee_sq;
-create table product(product_id int,product_name varchar(30),selling_price int
-,product_type varchar(20));
-insert into product(product_id,product_name,selling_price,product_type)
-values (201,"Jewellery",1100,"Luxury"),
-(202,"T-Shirt",300,"Non-Luxury"),
-(203,"Laptop",1300,"Luxury"),
-(204,"Table",400,"Non-Luxury");
+select * from employee_copy;
+delete from employee_sq where emp_id in( select emp_id from employee_copy where emp_age>28);
 
-desc product;
+select * from employee_sq;
 
-create table orders_1(order_id int,product_sold varchar(20),selling_price float);
+create table products(prod_id int,prod_name varchar(20),prod_price int,prod_type varchar(20));
+insert into products values(201,"Jewellery",1100,"Luxury"),(202,"Tshirt",300,"Non-Luxury"),
+(203,"Laptop",1300,"Luxury"),(204,"Table",400,"Non-Luxury");
+select * from products;
 
-select product_id from product where selling_price>1000;
+create table orders(id int,prod_sold varchar(20),selling_price int);
 
-insert into orders_1 select product_id,product_name,selling_price from product where
- product_id in (select product_id from product where selling_price>=1000);
-select * from orders_1;
+select prod_id from products where prod_price>1000;
+
+insert into orders select prod_id,prod_name,prod_price from products 
+where prod_id in (select prod_id from products where prod_price>1000);
+select * from orders;
+
+create table teacher(id int,age int);
+insert into teacher values(1,43),(2,35),(3,33),(4,30);
+select * from teacher;
+
+create table student(sid int,sage int);
+insert into student values(1,28),(2,30),(3,31),(4,27);
+
+select age from teacher where age>all(select sage  from student);
+select age from teacher where age>any(select sage  from student);
+
+#------------------3-14-------------------------------------------------------
+
+#--------joins--------------------------
+create table employee_j(emp_no int primary key,emp_name varchar(20),emp_add varchar(20));
+insert into employee_j values(1,"ram","delhi"),(2,"varun","chandigarh"),(3,"ravi","chandigarh"),(4,"amrit","delhi");
+
+create table department_j(dept varchar(20),dept_name varchar(20),emp_no int,
+foreign key(emp_no) references employee_j(emp_no));
+
+insert into department_j values('d1',"HR",1),("d2","IT",2),("d3","Marketing",4);
+
+#write a query to find dept_name of the department whose department is d3.
+select dept_name from department_j where dept="d3";
+
+select emp_add from employee_j where emp_name="varun";
+
+select employee_j.emp_no,employee_j.emp_name,employee_j.emp_add,
+department_j.dept,department_j.dept_name,department_j.emp_no 
+from employee_j,department_j;
 
 
-The SQL ANY and ALL Operators
-The ANY and ALL operators allow you to perform a comparison between a single column value and a range of other values.
+select employee_j.emp_no,employee_j.emp_name,employee_j.emp_add,
+department_j.dept,department_j.dept_name,department_j.emp_no 
+from employee_j cross join department_j;
 
-The SQL ANY Operator
-The ANY operator:
+select employee_j.emp_no,employee_j.emp_name,employee_j.emp_add,
+department_j.dept,department_j.dept_name,department_j.emp_no 
+from employee_j,department_j where employee_j.emp_no=department_j.emp_no ;
 
-returns a boolean value as a result
-returns TRUE if ANY of the subquery values meet the condition
-ANY means that the condition will be true if the operation is true for any of the values in the range.
+select employee_j.emp_no,employee_j.emp_name,employee_j.emp_add,
+department_j.dept,department_j.dept_name,department_j.emp_no 
+from employee_j natural join department_j;
+
+select employee_j.emp_name
+from employee_j,department_j where employee_j.emp_no=department_j.emp_no and department_j.dept_name="HR";
 
 
-#
-#The SQL ANY Operator
-#The ANY operator:
+select employee_j.emp_no,employee_j.emp_name,employee_j.emp_add,
+department_j.dept,department_j.dept_name,department_j.emp_no 
+from employee_j left outer join department_j on employee_j.emp_no=department_j.emp_no ;
 
-#returns a boolean value as a result
-#returns TRUE if ANY of the subquery values meet the condition
-#ANY means that the condition will be true if the operation is true for any of the values in the range
+select employee_j.emp_no,employee_j.emp_name,employee_j.emp_add,
+department_j.dept,department_j.dept_name,department_j.emp_no 
+from employee_j right outer join department_j on employee_j.emp_no=department_j.emp_no ;
+#full outer join
+select * from employee_j
+union all
+select * from department_j;
+
+select * from department_j
+union all
+select * from employee_j;
+
+#self join
+create table student_j
+(s_id varchar(20),c_id varchar(20),from_year varchar(10));
+
+insert into student_j values ("s1","c1","2016"),
+("s2","c2","2017"),("s1","c2","2017");
+
+select t1.s_id from student_j as t1,student_j as t2
+where t1.s_id=t2.s_id and t1.c_id != t2.c_id;
+
+#-------------------------------------------Inventory_database.sql script------------
+
+create database inventory;
+use inventory;
+
+CREATE TABLE customer (
+    customer_id int primary key,
+    cust_name varchar(30) NOT NULL,
+    city varchar(15),
+    grade int DEFAULT 0,
+    salesman_id int NOT NULL
+);
+drop table salesman;
+CREATE TABLE salesman(
+    salesman_id int primary key,
+    name varchar(30),
+    city varchar(15),
+    commission decimal(5,2)
+);
+drop table orders;
+CREATE TABLE orders (
+    ord_no decimal(5,0) primary key,
+    purch_amt decimal(8,2),
+    ord_date date,
+    customer_id int,
+    salesman_id int
+);
+alter table orders add foreign key(salesman_id) references salesman(salesman_id);
+alter table orders add foreign key(customer_id) references customer(customer_id);
+
+
+insert into salesman values
+(5001,"James Hoog","New York",0.15),
+(5002,"Nail Knite","Paris",0.13),
+(5005,"Pit Alex","London",0.11),
+(5006,"Mc Lyon","Paris",0.14),
+(5007,"Paul Adam","Rome",0.13),
+(5003,"Lauson Hen","San Jose",0.12);
+select * from salesman;
+insert into customer values
+(3002,"Nick Rimando","New York",100,5001),
+(3007,"Brad Davis","New York",200,5001),
+(3005,"Graham Zusi","California",200,5002),
+(3008,"Julian Green","London",300,5002),
+(3004,"Fabian Johnson","Paris",300,5006),
+(3009,"Geoff Cameron","Berlin",100,5003),
+(3003,"Jozy Altidor","Moscow",200,5007),
+(3001,"Brad Guzan","London",null,5005);
+
+
+insert into orders values
+(70009,270.65,'2012-09-10',3001,5005),
+(70002,65.26,"2012-10-05",3002,5001),
+(70004,110.50,"2012-08-17",3009,5003),
+(70005,2400.60,"2012-07-27",3007,5001),
+(70008,5760.00,"2012-09-10",3002,5001),
+(70010,1983.43,"2012-10-10",3004,5006),
+(70003,2480.40,"2012-10-10",3009,5003),
+(70011,75.29,"2012-08-17",3003,5007),
+(70013,3045.60,"2012-04-25",3002,5001),
+(70001,150.50,"2012-10-05",3005,5002),
+(70007,948.50,"2012-09-10",	3005,5002),
+(70012,250.45,"2012-06-27",	3008,5002);
+
+#https://www.w3resource.com/sql-exercises/subqueries/index.php
+# write a SQL query to find all the orders issued by the salesman 'Paul Adam'. 
+#Return ord_no, purch_amt, ord_date, customer_id and salesman_id.
 
 SELECT *
-FROM employee_sq
-WHERE emp_age = ANY (
-  SELECT emp_age
-  FROM employee_sq where emp_age>35
-);
+FROM orders
+WHERE salesman_id =
+    (SELECT salesman_id 
+     FROM salesman 
+     WHERE name='Paul Adam');
+     
+#write a SQL query to find all orders generated by London-based salespeople. 
+#Return ord_no, purch_amt, ord_date, customer_id, salesman_id.  
+select ord_no, purch_amt, ord_date, customer_id, salesman_id from orders
+where salesman_id in (select salesman_id from salesman where city="London" );
 
-#SQL ALL compares a value of the first table with all values of the second table and 
-#returns the row if there is a match with all values.
+#write a SQL query to find all orders generated by the salespeople who may work for customers whose id is 3007. 
+#Return ord_no, purch_amt, ord_date, customer_id, salesman_id.
+select ord_no, purch_amt, ord_date, customer_id, salesman_id from orders
+where salesman_id in(select salesman_id from customer where customer_id=3007 );
 
-#For example, if we want to find teachers whose age is greater than all students, we can use--
+#write a SQL query to find the purch_amt greater than the average purch_amt of 10th October 2012. 
+#Return ord_no, purch_amt, ord_date, customer_id, salesman_id. 
+select ord_no, purch_amt, ord_date, customer_id, salesman_id from orders
+where purch_amt>(select avg(purch_amt) from orders where ord_date="2012-10-10");
 
-SELECT * 
-FROM employee_sq
-WHERE emp_salary >=  ALL (
-  SELECT emp_salary
-  FROM employee_sq
-);
+#write a SQL query to find all the orders generated in New York city. 
+#Return ord_no, purch_amt, ord_date, customer_id and salesman_id.
 
+select  ord_no, purch_amt, ord_date, customer_id,salesman_id from orders 
+where customer_id in (select customer_id from customer where city="New York");
+ 
+#write a SQL query to determine the commission of the salespeople whose customers are in Paris. Return commission.
+select commission from salesman where salesman_id in (select salesman_id from customer where city="Paris");
 
-SELECT * 
-FROM employee_sq
-WHERE emp_salary = (
-  SELECT max(emp_salary)
-  FROM employee_sq
-);
-SELECT emp_salary
-  FROM employee_sq;
-
-#We can use any comparison operators like =, >, <, etc. with the ANY and ALL keywords.
-
-#The SQL EXISTS Operator
-#The EXISTS operator is used to test for the existence of any record in a subquery.
-
-#The EXISTS operator returns TRUE if the subquery returns one or more records.
-SELECT * 
-FROM employee_sq
-WHERE exists (
-  SELECT emp_age
-  FROM employee_sq where emp_age=25
-);
-
-SELECT * 
-FROM employee_sq
-WHERE not exists (
-  SELECT emp_age
-  FROM employee_sq where emp_age=25
-);
-
-
-Teachers 
-id,name,age
-1,Peter,32
-2,Megan,43
-3,rose,29
-4,Linda,30
-5,Mary,41
-
-Students
-id,name,age
-1,Harry,23
-2,Jack,42
-3,Joe,32
-4,Dent,23
-5,Bruce,40
-
-if we want to find teachers whose age is similar to any of the student's age
-
+#Write a query to display all the customers whose ID is 2001 below the salesperson ID of Mc Lyon
 SELECT *
-FROM Teachers
-WHERE age = ANY (
-  SELECT age
-  FROM Students
-);
+FROM customer
+WHERE customer_id =
+    (SELECT salesman_id -2001
+     FROM salesman
+     WHERE name = 'Mc Lyon');
+     
+#write a SQL query to count the number of customers with grades above the average in New York City. 
+#Return grade and count.
+select * from customer; 
+select grade,count(*) from customer group by grade 
+having grade>(select avg(grade) from customer where city="New York");
 
-SQL ALL compares a value of the first table with all values of the second table and returns the row if there is a match with all values.
+#write a SQL query to find those salespeople who earned the maximum commission. 
+#Return ord_no, purch_amt, ord_date, and salesman_id.
+select  ord_no, purch_amt, ord_date,salesman_id from orders 
+where salesman_id in (select salesman_id from salesman where commission= (select max(commission) from salesman) );
 
-For example, if we want to find teachers whose age is greater than all students, we can use--
+#write a SQL query to find those orders that are equal or higher than the average amount of the orders. 
+#Return ord_no, purch_amt, ord_date, customer_id and salesman_id.
+select avg(purch_amt) from orders;
+select ord_no, purch_amt, ord_date, customer_id,salesman_id
+from orders a where purch_amt>=(select avg(purch_amt) from orders b );#where b.customer_id=a.customer_id);
 
-SELECT * 
-FROM Teachers
-WHERE age >  ALL (
-  SELECT age
-  FROM Students
-);
+#Write a query to find the sums of the amounts from the orders table, grouped by date, 
+#and eliminate all dates where the sum was not at least 1000.00 above the maximum order amount for that date
+select a.ord_date,sum(purch_amt) from orders a group by ord_date
+having sum(purch_amt)>(select max(purch_amt)+1000 from orders b where a.ord_date=b.ord_date );
 
-We can use any comparison operators like =, >, <, etc. with the ANY and ALL keywords.
-
-
-The SQL EXISTS Operator
-The EXISTS operator is used to test for the existence of any record in a subquery.
-
-The EXISTS operator returns TRUE if the subquery returns one or more records.
-
-SELECT column_name(s)
-FROM table_name
-WHERE EXISTS
-(SELECT column_name FROM table_name WHERE condition);
+ #Write a query to extract all data from the customer table if and only if one or more of 
+ #the customers in the customer table are located in London
  
- #------------------------------Joins in SQL----------
+ select customer.* from customer where exists(select * from customer where city="London");
  
- # Relational Algebra consists of mathematical expression to represent joins.
- # and in SQL , we implement joins whenever we want to join two or more table to get
- # the desired o/p using common cols of different tables. If nothing is common between 
- # tables, then we cannot apply joins.
- 
- #------------see joins.docx------------------------
- 
- create table employee_j(emp_no INT PRIMARY KEY,emp_name VARCHAR(20),emp_address VARCHAR(20));
- insert into employee_j(emp_no ,emp_name ,emp_address) values(1,'ram','delhi'),
-    (2,'varun','chandigarh'),
-    (3,'ravi','chandigarh'),
-    (4,'amrit','delhi');
-create table department_j(dept_no VARCHAR(10),dept_name VARCHAR(10),emp_no INT, FOREIGN KEY(emp_no) REFERENCES employee_j(emp_no));
+ #write a SQL query to find salespeople who deal with multiple customers. 
+ #Return salesman_id, name, city and commission.
+ select salesman_id, name, city,commission from salesman where salesman_id in(select distinct salesman_id
+ from customer a where exists(select * from customer b where a.salesman_id=b.salesman_id
+ and b.cust_name<>a.cust_name) );
 
-insert into department_j(dept_no,dept_name ,emp_no ) values('d1','HR',1),
-    ('d2','IT',2),
-    ('d3','marketing',4);
-
-# Q.Write a query to find name of the department whole dept_no is d3
-
-select dept_name from department_j where dept_no='d3';
-
-# Now,I don't need to use join in above query.
-
-# Q. Write a query to know the address of the employee whose name is “varun”
-
-select emp_address from employee_j where emp_name='varun';
-# Now,I don't need to use join in above query
+desc customer;
+desc salesman;
+desc orders;
+select * from customer;
 
 
-#Write a query to find emp_name of a employee who is working in “HR” department?
+#write a SQL query to find the salespeople who deal with those customers who live in the same city.
+#Return salesman_id, name, city and commission.
+select salesman.* from salesman where city = Any(select city from customer);
 
-#Step 1→ first find “HR” dept is in which table.
+#write a SQL query to find salespeople whose place of residence matches any city where customers live. 
+#Return salesman_id, name, city and commission.
+select salesman.* from salesman where city IN(select city from customer);
 
-#Step 2: find “emp_name” is in which table
- 
-#Step 3: joins
+#write a SQL query to find all those salespeople whose names appear alphabetically lower than the customer’s name. 
+#Return salesman_id, name, city, commission. 
+select salesman.* from salesman where name in (select salesman.name from customer
+where salesman.name<customer.cust_name);
 
-#JOINS=cross product + some_condition
+# this same query u can write like-- 
+select salesman.* from salesman where exists (select salesman.name from customer
+where salesman.name<customer.cust_name);
 
-#Display employee name who belongs to delhi.Do we need to use joins?No.
+# in clause is preferred when there is a small list of static values or inner query returns a very 
+#less number of rows. Exists clause is preferred when there is a need to check existence of values in
+# another table or when there is a need to check against more than 1 col.
 
-Select emp_name from employee_j where emp_address='delhi';
+#write a SQL query to calculate the total order amount generated by a salesperson. 
+#Salespersons should be from the cities where the customers reside. 
+#Return salesperson name, city and total order amount. 
 
-# Q. Obtain all employee name who are working in some department.
-# emp_name is in employee_j and department no. is in department_j.
-# Emp_no → common between 2 tables
-#o/p:
-#Ram 
-#Varun 
-#Amrit
-# empno. 3 , Ravi is not present in department_j table
-#select emp_name from employee_j,department_j[cross product] where Employee.emp_no=Department.emp_no
-
-# explain naturaljoin multiplication from join.docx
-select emp_name from employee_j,department_j where Employee_j.emp_no=Department_j.emp_no;
-
-# This is also like Natural Join.
-#select emp_name from employee_j natural join department_j where Employee_j.emp_no=Department_j.emp_no;
-select emp_name from employee_j natural join department_j;
-
-
-#RIGHT OUTER JOIN
-# Allthe records of rifght table will be present giving Null if some department value is not present.
-Select dept_no,dept_name,emp_name,emp_address from employee_j RIGHT OUTER JOIN department_j
-ON employee_j.emp_no=department_j.emp_no;
-
-#LEFT OUTER JOIN
-
-#It gives the matching row and the rows which are in the left table but not in the right table
-
-#select emp_name,emp_address,dept_no,dept_name from [left_table_name] 
-#LEFT OUTER JOIN  [right_table_name] ON employee.emp_no=depatment.emp_no
-
-select emp_name,emp_address,dept_no,dept_name from employee_j LEFT OUTER JOIN department_j 
-ON employee_j.emp_no=department_j.emp_no;
-
-#FULL OUTER JOIN 
-
-#Select * from first_table_name Union all select * from second_table_name;
-select * from department_j UNION ALL select * from employee_j; # employee_j records are merged on department_j
-select * from employee_j UNION ALL select * from department_j;
-# department_j records are merged on employee_j
-
-
-# Inner Join
-select emp_name,emp_address,dept_no,dept_name from employee_j INNER JOIN department_j 
-ON employee_j.emp_no=department_j.emp_no;
-# Self join
-
-create table student_j(student_id VARCHAR(10),course_id VARCHAR(10),course_pursuing_since VARCHAR(10));
-
-insert into  student_j(student_id ,course_id ,course_pursuing_since ) values('s1','c1','2016'),
-    ('s2','c2','2017'),
-    ('s1','c2','2017');
+#write a SQL query to find those customers whose grades are different from those living in Paris. 
+#Return customer_id, cust_name, city, grade and salesman_id.
+SELECT *
+FROM customer 
+WHERE grade NOT IN
+   (SELECT grade
+	FROM customer
+	WHERE city='Paris');
     
-# Q.Display that student_id who is enrolled in more than 1 course!!
-select student_id from student_j;
-# Use aliases because sql compiler looks for two different tables to join.
 
 
-Select t2.student_id from 
-student_j as t1,student_j as t2 where t1.student_id=t2.student_id and t1.course_id!=t2.course_id ;
 
-#And → both conditions should be true
-#Or→ any 1 
 
-#----------------------------Views--------
+#------------------------------------------joins
+
+#write SQL query to find the customers who placed orders on 17th August 2012. 
+#Return ord_no, purch_amt, ord_date, customer_id, salesman_id and cust_name. 
+
+select orders.*, customer.cust_name
+from orders,customer where orders.customer_id=customer.customer_id
+and orders.ord_date="2012-08-17";
+
+
+select * from orders;
+
+#write a SQL query to find those orders where the order amount exists between 500 and 2000. 
+#Return ord_no, purch_amt, cust_name, city.
+select a.ord_no, a.purch_amt, b.cust_name, b.city
+from orders a,customer b where a.customer_id=b.customer_id and a.purch_amt between 500 and 2000;
+
+#write a SQL query to find the salesperson(s) and the customer(s) he represents. 
+#Return Customer Name, city, Salesman, commission
+select customer.cust_name,customer.city, salesman.name, salesman.commission
+from customer inner join salesman on customer.salesman_id=salesman.salesman_id;
+
+# write a SQL query to find the salesperson and customer who reside in the same city.
+#Return Salesman, cust_name and city.
+SELECT salesman.name AS "Salesman",
+customer.cust_name, customer.city,salesman.city 
+FROM salesman, customer 
+where salesman.city=customer.city;
+
+SELECT salesman.name AS "Salesman",
+customer.cust_name, customer.city,salesman.city 
+FROM salesman inner join customer 
+on salesman.city=customer.city;
+
+#write a SQL query to find the salesperson(s) and the customer(s) he represents. 
+#Return Customer Name, city, Salesman, commission
+SELECT salesman.name AS "Salesman",
+customer.cust_name "Customer_Name",salesman.commission, customer.city,salesman.city 
+FROM salesman inner join customer 
+on salesman.salesman_id=customer.salesman_id;
+
+#write a SQL query to find salespeople who received commissions of more than 12 percent from the company. 
+#Return Customer Name, customer city, Salesman, commission. 
+SELECT salesman.name AS "Salesman",
+customer.cust_name "Customer_Name",salesman.commission, customer.city
+FROM salesman,customer where salesman.salesman_id=customer.salesman_id and salesman.commission>0.12;
+
+
+SELECT salesman.name AS "Salesman",
+customer.cust_name "Customer_Name",salesman.commission, customer.city
+FROM salesman inner join customer on salesman.salesman_id=customer.salesman_id and salesman.commission>0.12;
+
+#SQL query to locate those salespeople who do not live in the same city where their customers live 
+#and have received a commission of more than 12% from the company. 
+#Return Customer Name, customer city, Salesman, salesman city, commission. 
+SELECT salesman.name AS "Salesman",
+customer.cust_name "Customer_Name",salesman.commission, customer.city,salesman.city
+from salesman inner join customer on salesman.salesman_id=customer.salesman_id where salesman.commission>0.12
+and customer.city<>salesman.city;
+
+#write a SQL query to find the details of an order. 
+#Return ord_no, ord_date, purch_amt, Customer Name, grade, Salesman, commission.
+select a.ord_no, a.ord_date, a.purch_amt, b.cust_name, b.grade, c.name, c.commission
+from orders a inner join customer b on a.customer_id=b.customer_id inner join salesman c on c.salesman_id=b.salesman_id; 
+
+#Write a SQL statement to join the tables salesman, customer and orders so that the same column
+# of each table appears once 
+#and only the relational rows are returned.
+SELECT * FROM orders NATURAL JOIN customer  NATURAL JOIN salesman;
+
+# write a SQL query to display the customer name, customer city, grade, salesman, salesman city. 
+#The results should be sorted by ascending customer_id.
+select customer.customer_id,customer.cust_name, customer.city, customer.grade, salesman.name, salesman.city
+from customer left join salesman on customer.salesman_id=salesman.salesman_id order by customer_id;
+
+#write a SQL query to find those customers with a grade less than 300. 
+#Return cust_name, customer city, grade, Salesman, salesmancity. 
+#The result should be ordered by ascending customer_id
+select customer.customer_id,customer.cust_name, customer.city, customer.grade, salesman.name, salesman.city
+from customer left join salesman on customer.salesman_id=salesman.salesman_id where 
+customer.grade<300 order by customer_id;
+
+# Write a SQL statement to make a report with customer name, city, order number, order date, 
+# and order amount in ascending order
+# according to the order date to determine whether any of the existing customers have placed an order or not. 
+select a.ord_date,b.cust_name,b.city,a.ord_no,a.purch_amt
+from orders a left join customer b  on a.customer_id=b.customer_id
+order by a.ord_date; 
+
+#SQL statement to generate a report with customer name, city, order number, order date, 
+#order amount, salesperson name, and commission to determine if any of the existing customers have not placed orders
+# or if they have placed orders through their salesman or by themselves.
+select a.ord_date,b.cust_name,b.city,a.ord_no,a.purch_amt,c.name,c.commission
+from orders a left join customer b on a.customer_id=b.customer_id left join salesman c
+on a.salesman_id=c.salesman_id;
+
+#Write a SQL statement to generate a list in ascending order of salespersons who work either 
+#for one or more customers 
+#or have not yet joined any of the customers.
+select salesman.salesman_id from salesman left join customer on 
+salesman.salesman_id=customer.salesman_id order by salesman_id;
+
+#Write a SQL query to combine each row of the salesman table with each row of the customer table.
+SELECT * 
+FROM salesman a 
+CROSS JOIN customer b;
+
+#Write a SQL statement to make a Cartesian product between salesman and customer 
+#i.e. each salesman will appear for all customers and vice versa for those salesmen 
+#who must belong to a city which is not the same as his customer and the customers should have their own grade.
+SELECT * 
+FROM salesman a 
+CROSS JOIN customer b
+WHERE a.city IS NOT NULL 
+AND b.grade IS NOT NULL 
+AND  a.city<>b.city;
+
+
+#-----------------------------self join---------------------
+
+ #write a SQL query to find salespeople who deal with multiple customers. 
+ #Return salesman_id, name, city and commission.
+ select distinct(a.salesman_id) from customer a,customer b 
+ where a.salesman_id=b.salesman_id and a.cust_name<>b.cust_name;
+ 
+ #write a SQL query to find salespeople who deal with a single customer. 
+#Return salesman_id, name, city and commission.
+select salesman.* from salesman where salesman_id not in
+(select distinct(a.salesman_id) from customer a,customer b 
+ where a.salesman_id=b.salesman_id and a.cust_name<>b.cust_name);
+
+#write a SQL query to find the salespeople who deal the customers with more than one order. 
+#Return salesman_id, name, city and commission
+select salesman.* from salesman where salesman_id in (select a.salesman_id from orders a, orders b
+where a.salesman_id=b.salesman_id and a.ord_no<>b.ord_no );
+
+#write a SQL query to find the salespeople who deal with those customers who live in the same city.
+#Return salesman_id, name, city and commission.
+select distinct(salesman.salesman_id) from salesman,customer where salesman.city=customer.city;
+# in (select a.salesman_id from customer a,  b where a. ); 
+-----
+
+#---------------------------joins inside subquery-----------------
+
+#write a SQL query to find orders where the order amount is less than the order amount of a customer 
+#residing in London City. 
+#Return ord_no, purch_amt, ord_date, customer_id and salesman_id. 
+select ord_no, purch_amt, ord_date, customer_id,salesman_id from orders
+where purch_amt<Any(select purch_amt from orders,salesman where salesman.salesman_id=orders.salesman_id
+and city="London");
+
+
+
+#------------------------------views----------------------------
+#create a view for those salespeople who belong to the city of New York. 
+create view newyorkstaff as select * from salesman where city="New York";
+select * from newyorkstaff;
+
+#create a view for all salespersons. Return salesperson ID, name, and city.  
+create view salesown as select salesman_id,name,city from salesman;
+select * from salesown;
+
+#create a view that counts the number of customers in each grade.  
+create view gradecount as select grade,count(customer_id)
+from customer group by grade;
+select * from gradecount;
+
+CREATE VIEW gradecount1 (grade, number)
+AS SELECT grade, COUNT(*)
+FROM customer
+GROUP BY grade;
+
+# create a view to count the number of unique customers, compute the average and 
+#the total purchase amount of customer orders by each date.
+drop view totalforday;
+create view totalforday(ord_date,count,avg,sum) as select ord_date,count(distinct customer_id),avg(purch_amt),
+sum(purch_amt) from orders group by ord_date ;
+select * from totalforday;
+
+#create a view to get the salesperson and customer by name. 
+#Return order name, purchase amount, salesperson ID, name, customer name.
+CREATE VIEW nameorders
+AS SELECT ord_no, purch_amt, a.salesman_id, name, cust_name
+FROM orders a, customer b, salesman c
+WHERE a.customer_id = b.customer_id
+AND a.salesman_id = c.salesman_id;
+select * from nameorders;
+
+#create a view to find the salesperson who handles a customer who makes the highest order of the day. 
+#Return order date, salesperson ID, name.
+create view elitesalesman as 
+select b.ord_date,a.salesman_id,a.name
+from salesman a,orders b
+where a.salesman_id=b.salesman_id
+and b.purch_amt=(select max(purch_amt) from orders c where c.ord_date=b.ord_date);
+
+#create a view to find the salesperson who deals with the customer with the highest order at least 
+#three times per day. Return salesperson ID and name.
+drop view incentive;
+create view incentive as 
+select distinct salesman_id,name from elitesalesman a
+where 3<=(select count(*) from elitesalesman b where a.salesman_id=b.salesman_id);
+select * from incentive;
+
+#create a view to find the salespersons who issued orders on either August 17th, 2012 or October 10th, 2012. 
+#Return salesperson ID, order number and customer ID.
+CREATE VIEW sorder
+AS SELECT salesman_id, ord_no, customer_id
+FROM orders
+WHERE ord_date IN('2012-08-17', '2012-10-10');
+
+#The SQL UPDATE VIEW command can be used to modify the data of a view.
+
+#All views are not updatable. So, UPDATE command is not applicable to all views. 
+#An updatable view is one which allows performing a UPDATE command on itself without affecting any other table.
+
+#When can a view be updated?
+#1. The view is defined based on one and only one table.
+
+#2. The view must include the PRIMARY KEY of the table based upon which the view has been created.
+
+#4. The view must not have any DISTINCT clause in its definition.
+
+#5. The view must not have any GROUP BY or HAVING clause in its definition.
+
+#6. The view must not have any SUBQUERIES in its definitions.
+
+#7. If the view you want to update is based upon another view, the later should be updatable.
+
+#8. Any of the selected output fields (of the view) must not use constants, strings or value expressions.
+
+create view newyorkstaff as select * from salesman where city="New York";
+select * from newyorkstaff;
+update newyorkstaff set commission=0.20 where city="New York"; #0.15
+select * from newyorkstaff;
+select * from salesman where city="New York";
+update newyorkstaff set commission=0.15 where city="New York"; #0.15
+select * from newyorkstaff;
+select * from salesman where city="New York";
+
+#When you update a view it affects original table, because SELECT opens an implicit cursor 
+#which points to the records from the base table. 
+#When ever you update the records it updates the original data since they are pointers to the original.
+
+#------------------indexes--------------
+#The indexes are special objects which is built on top of tables. 
+#The indexes can do an operation like SELECT, DELETE and UPDATE statement faster to manipulate large amount of data.
+#An INDEX is created on columns of a table. One table may contain one or more INDEX tables.
+#The INDEX first sorts the data and then it assigns an identification for each row.
+#INDEXES are pointers that represent the physical address of a data.
+#Alter index ,drop index.
+
+#-----------------triggers-------------
+#A trigger is a special type of stored procedure that automatically runs when an event occurs in the database server.
+#create trigger [trigger_name] 
+#[before | after]  
+#{insert | update | delete}  
+#on [table_name]  
+#[for each row]  
+#[trigger_body]  
+
+#create trigger [trigger_name]: Creates or replaces an existing trigger with the trigger_name.
+#[before | after]: This specifies when the trigger will be executed.
+#{insert | update | delete}: This specifies the DML operation.
+#on [table_name]: This specifies the name of the table associated with the trigger.
+#[for each row]: This specifies a row-level trigger, i.e., the trigger will be executed for each row being affected.
+#[trigger_body]: This provides the operation to be performed as trigger is fired
+
+#Given Student Report Database, in which student marks assessment is recorded. In such schema, 
+#create a trigger so that the 
+#total and percentage of specified marks is automatically inserted whenever a record is insert.
+
+create table student(
+ tid  int(4)  primary key auto_increment,
+ name  varchar(30),subj1 int(2),subj2 int(2),subj3 int(2),total int(3),per int(3)  );   
+desc student;
+drop trigger stud_marks;
+create trigger stud_marks before insert on  student
+for each row set new.total=new.subj1+new.subj2+new.subj3,
+new.per=new.total*0.60; 
+
+insert into student values(0, "ABCDE", 20, 20, 20, 0, 0);
+select * from student;
+
+#---------------------------procedure-------
+select version();
+
+show privileges;
+
+call order_data();
+#In MySQL stored procedures, user variables are referenced with an ampersand (@) prefixed 
+#to the user variable name (for example, @x and @y).
+call my_procedure_Local_Variables();
+
+call my_proc_IN(2);
+select max(purch_amt)  from orders;
+
+call out_p(@M);
+select @M as count;
+
+call out_w3(@M);
+select @M as count;
+
+# inout-----
+call my_proc_inout(@c,"Moscow");
+select @c as count;
+select * from customer;
+
+call elseif_try(30,30);
+call elseif_try(@d,30,40);
+select @d;
+
+call elseif_try(@d,-3,40);
+select @d;
+
+#-----------------------------------------while
+
+create table jobs(job_id varchar(20),job_title varchar(30),
+min_salary int, max_salary int);
+insert into jobs(job_id,job_title,
+min_salary, max_salary ) values
+("AD_PRES","President",20000,40000),
+("AD_VP","Administration Vice President",15000,30000),("AD_ASST","Administration Assistant",3000,6000),
+("FI_MGR","Finance Manager",8200,16000),
+("FI_ACCOUNT","Accountant",4200,9000),
+("AC_MGR","Accounting Manager",8200,16000),
+("AC_ACCOUNT","Public Accountant",4200,9000),
+("SA_MAN","Sales Manager",10000,20000),
+("SA_REP","Sales Representative",6000,12000),
+("PU_MAN","Purchasing Manager",8000,15000),
+("PU_CLERK","Purchasing Clerk",2500,5500),("ST_MAN","Stock Manager",5500,8500),
+("ST_CLERK","Stock Clerk",2000,5000),
+("SH_CLERK","Shipping Clerk",2500,5500),("IT_PROG" ,"Programmer",4000,10000),
+("MK_MAN","Marketing Manager",9000,15000),
+("MK_REP","Marketing Representative",4000,9000),
+("HR_REP","Human Resources Representative",4000,9000),
+("PR_REP","Public Relations Representative",4500,10500); 
+
+select * from jobs;
+call my_proc_case(@c,10000);
+select @c;
+
+create table num(i int);
+call loop_proc(5);
+select * from num;
+
+call repeat_proc(10);
+select @sum;
+
+call while_procedure(10);
+select @sum;
+
+#--------------------------------cursor--------------------
+
+CREATE TABLE GetVatsaCursor(  
+  C_ID INT PRIMARY KEY AUTO_INCREMENT,  
+  c_name VARCHAR(50),  
+  c_address VARCHAR(200)  
+);  
+  
+CREATE TABLE Vbackupdata(  
+  C_ID INT,  
+  c_name VARCHAR(50),  
+  c_address VARCHAR(200)  
+); 
+
+INSERT INTO GetVatsaCursor(c_name, c_address) VALUES('Test', '132, Vatsa Colony'),  
+  ('Admin', '133, Vatsa Colony'),  
+  ('Vatsa', '134, Vatsa Colony'),  
+  ('Onkar', '135, Vatsa Colony'),  
+  ('Rohit', '136, Vatsa Colony'),  
+  ('Simran', '137, Vatsa Colony'),  
+  ('Jashmin', '138, Vatsa Colony'),  
+  ('Anamika', '139, Vatsa Colony'),  
+  ('Radhika', '140, Vatsa Colony'); 
+  
+SELECT * FROM GetVatsaCursor;  
+SELECT * FROM Vbackupdata;
+
+CALL firstCurs();  
+SELECT * FROM Vbackupdata; 
+
+
+#---------------------views-----
+
+select * from employee_j;
+
+create view emp_v as select emp_name,emp_add
+from employee_j;
+select * from emp_v;
 
 # views is a virtual table. It creates table but donot occupy any space. VIEWS IN SQL.docx----------------------
 # it'sjust a dummy or virtual table. So changes in views table are not reflected on original table.
@@ -1399,6 +1765,9 @@ in shell--------------------------------------------
 MariaDB [(none)]> use fifa19;
 
 MariaDB [fifa19]> load data local infile "C:/Users/itvedant/Documents/Parinita/Database/AV/fifa19.csv" into table players columns terminated by "," optionally enclosed by "'" ignore 1 lines;
+---------------------------------------------------------------------------------
+
+https://beginnersbook.com/2015/04/e-r-model-in-dbms/
 
 #################-----------Advanced queries-------------
 
@@ -2019,6 +2388,1567 @@ desc refund_detail;
 select count(*) from users;
 select count(*) from transaction;
 select count(*) from refund_detail;
+
+
+#---------------------------------------------------------- Dynamic SQl----------------------------------
+
+https://www.mysqltutorial.org/mysql-triggers/create-multiple-triggers-for-the-same-trigger-event-and-action-time/------------mysqlsampledatabase.sql--------------------------------
+
+#---------------------------procedure-------
+select version();
+
+show privileges;
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `order_data`()
+BEGIN
+select * from orders;
+END
+
+call order_data();
+========================================================
+
+#In MySQL stored procedures, user variables are referenced with an ampersand (@) prefixed 
+#to the user variable name (for example, @x and @y).
+
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `my_procedure_Local_Variables`()
+BEGIN   /* declare local variables */   
+DECLARE a INT DEFAULT 10;   
+DECLARE b, c INT;    /* using the local variables */   
+SET a = a + 100;   
+SET b = 2;   
+SET c = a + b;    
+BEGIN      /* local variable in nested block */      
+DECLARE c INT;             
+SET c = 5;       
+/* local variable c takes precedence over the one of the          
+same name declared in the enclosing block. */       
+SELECT a, b, c;   
+END;    
+SELECT a, b, c;
+BEGIN   
+SET @x = 15;       
+SET @y = 10;       
+SELECT @x, @y, @x-@y;
+END;
+
+END
+
+call my_procedure_Local_Variables();
+=========================================================
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `my_proc_IN`(IN var1 int)
+BEGIN
+select * from salesman limit var1;
+END
+
+call my_proc_IN(2);
+
+====================================
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `out_p`(out cnt int)
+BEGIN
+select count(ord_no) into cnt from orders;
+END
+
+
+call out_p(@M);
+select @M as count;
+===============================================
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `out_w3`(out highest_amt int)
+BEGIN
+select max(purch_amt) into highest_amt from orders;
+END
+
+call out_w3(@M);
+select @M as count;
+
+
+==========================
+CREATE DEFINER=`root`@`localhost` PROCEDURE `my_proc_inout`(inout gr int,in c varchar(20))
+BEGIN
+select count(city) into gr from customer where city=c;
+END
+
+
+# inout-----
+call my_proc_inout(@c,"Moscow");
+select @c as count;
+select * from customer;
+
+
+==========================================
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `elseif_try`(inout result varchar(20),in n1 int,in n2 int)
+BEGIN
+if n1>n2
+then
+ select "n1 > n2" into result;
+elseif n2>n1
+ then
+ select "n2>n1" into result;
+elseif n2=n1
+then
+select "n2=n1" into result;
+elseif n1<0
+then
+select "n1<0" into result;
+else
+select "Hello" into result;
+
+ end if;
+END
+
+call elseif_try(30,30);
+call elseif_try(@d,30,40);
+select @d;
+
+call elseif_try(@d,-3,40);
+select @d;
+
+#-----------------------------------------when case
+
+create table jobs(job_id varchar(20),job_title varchar(30),
+min_salary int, max_salary int);
+insert into jobs(job_id,job_title,
+min_salary, max_salary ) values
+("AD_PRES","President",20000,40000),
+("AD_VP","Administration Vice President",15000,30000),("AD_ASST","Administration Assistant",3000,6000),
+("FI_MGR","Finance Manager",8200,16000),
+("FI_ACCOUNT","Accountant",4200,9000),
+("AC_MGR","Accounting Manager",8200,16000),
+("AC_ACCOUNT","Public Accountant",4200,9000),
+("SA_MAN","Sales Manager",10000,20000),
+("SA_REP","Sales Representative",6000,12000),
+("PU_MAN","Purchasing Manager",8000,15000),
+("PU_CLERK","Purchasing Clerk",2500,5500),("ST_MAN","Stock Manager",5500,8500),
+("ST_CLERK","Stock Clerk",2000,5000),
+("SH_CLERK","Shipping Clerk",2500,5500),("IT_PROG" ,"Programmer",4000,10000),
+("MK_MAN","Marketing Manager",9000,15000),
+("MK_REP","Marketing Representative",4000,9000),
+("HR_REP","Human Resources Representative",4000,9000),
+("PR_REP","Public Relations Representative",4500,10500); 
+=========================================
+
+
+
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `my_proc_case`(inout no_emp int,in salary int)
+BEGIN
+case 
+when (salary>10000)
+then select count(job_id) into no_emp from jobs where min_salary>10000;
+when (salary<10000)
+then select count(job_id) into no_emp from jobs where min_salary<10000;
+else select count(job_id) into no_emp from jobs where min_salary=10000;
+end case;
+END
+
+
+select * from jobs;
+call my_proc_case(@c,10000);
+select @c;
+
+============================================
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `loop_proc`(in num int)
+BEGIN
+declare x int;
+set x=0;
+loop_label: loop
+insert into num value (x);
+set x=x+1;
+if x>=num
+then leave loop_label;
+end if;
+end loop;
+END
+
+create table num(i int);
+call loop_proc(5);
+select * from num;
+
+
+======================================================
+
+MySQL: REPEAT Statement
+
+The REPEAT statement executes the statement(s) repeatedly as long as the condition is true. The condition is checked every time at the end of the statements.
+
+[begin_label:] 
+REPEAT     
+statement_list 
+UNTIL search_condition 
+END 
+REPEAT 
+[end_label]
+statement_list: List of one or more statements, each statement terminated by a semicolon(;).
+search_condition : An expression.
+
+A REPEAT statement can be labeled.
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `repeat_proc`(in n int)
+BEGIN
+set @sum=0;
+set @x=1;
+repeat 
+if mod(@x,2)=0
+then set @sum=@sum+@x;
+end if;
+set @x=@x+1;
+until @x>n
+end repeat;
+END
+
+call repeat_proc(10);
+select @sum;
+
+#----------------------------------------------
+MySQL: RETURN Statement
+
+The RETURN statement terminates execution of a stored function and returns the value expr to the function caller. 
+There must be at least one RETURN statement in a stored function. There may be more than one if the function has multiple exit points. 
+
+RETURN expr
+
+This statement is not used in stored procedures or triggers. The LEAVE statement can be used to exit a stored program of those types.
+#-----------------------------------------------
+MySQL : WHILE Statement
+
+The WHILE statement executes the statement(s) as long as the condition is true. The condition is checked every time at the beginning of the loop. 
+Each statement is terminated by a semicolon (;). Here is the syntax:
+
+[begin_label:] WHILE search_condition DO
+    statement_list
+END WHILE [end_label]
+A WHILE statement can be labeled.
+
+Example:
+
+Odd numbers are numbers that cannot be divided exactly by 2. In the following procedure, 
+a user passes a number through IN parameter and make a sum of odd numbers between 1 and that particular number.
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `while_procedure`(in n int)
+BEGIN
+set @sum=0;
+set @x=1;
+while @x<n
+do 
+if mod(@x,2)<>0 then
+set @sum=@sum + @x;
+end if;
+set @x=@x+1;
+end while; 
+END
+
+
+call while_procedure(10);
+select @sum;
+
+=================================================================
+MySQL: ALTER PROCEDURE
+
+This statement can be used to change the characteristics of a stored procedure. More than one change may be specified in an ALTER PROCEDURE statement. However, you cannot change the parameters or body of a stored procedure using this statement; to make such changes, you must drop and re-create the procedure using DROP PROCEDURE and CREATE PROCEDURE. Here is the syntax :
+
+ALTER PROCEDURE proc_name [characteristic ...]characteristic:    
+COMMENT 'string'  
+| LANGUAGE SQL  
+| { CONTAINS SQL 
+| NO SQL | READS SQL DATA 
+| MODIFIES SQL DATA }  
+| SQL SECURITY { DEFINER 
+| INVOKER }
+You must have the ALTER ROUTINE privilege for the procedure. By default, that privilege is granted automatically to the procedure creator. In our previous procedure "my_proc_WHILE" the comment section was empty. To input new comment or modify the previous comment use the following command :
+
+mysql> ALTER PROCEDURE my_proc_WHILE 
+COMMENT 'Modify Comment';
+>Query OK, 0 rows affected (0.20 sec)
+You can check the result through SHOW CREATE PROCEDURE command which we have discussed earlier.
+
+MySQL: DROP PROCEDURE
+
+This statement is used to drop a stored procedure or function. That is, the specified routine is removed from the server. You must have the ALTER ROUTINE privilege for the routine. (If the automatic_sp_privileges system variable is enabled, that privilege and EXECUTE are granted automatically to the routine creator when the routine is created and dropped from the creator when the routine is dropped
+
+DROP {PROCEDURE | FUNCTION} [IF EXISTS] sp_name
+The IF EXISTS clause is a MySQL extension. It prevents an error from occurring if the procedure or function does not exist. A warning is produced that can be viewed with SHOW WARNINGS. Here is an example:
+
+mysql> DROP PROCEDURE new_procedure;
+Query OK, 0 rows affected (0.05 sec)
+
+#---------------------------------------------------------Cursor----------------------------------
+
+MySQL: Cursors
+
+A database cursor is a control structure that enables traversal over the records in a database. Cursors are used by database programmers to process individual rows returned by database system queries. Cursors enable manipulation of whole result sets at once. In this scenario, a cursor enables the rows in a result set to be processed sequentially. In SQL procedures, a cursor makes it possible to define a result set (a set of data rows) and perform complex logic on a row by row basis. By using the same mechanics, an SQL procedure can also define a result set and return it directly to the caller of the SQL procedure or to a client application.
+
+MySQL supports cursors inside stored programs. The syntax is as in embedded SQL. Cursors have these properties :
+- Asensitive: The server may or may not make a copy of its result table
+- Read only: Not updatable
+- Nonscrollable: Can be traversed only in one direction and cannot skip rows
+
+To use cursors in MySQL procedures, you need to do the following :
+- Declare a cursor.
+- Open a cursor.
+- Fetch the data into variables.
+- Close the cursor when done.
+
+Declare a cursor:
+
+The following statement declares a cursor and associates it with a SELECT statement that retrieves the rows to be traversed by the cursor.
+
+DECLARE cursor_name 
+CURSOR FOR select_statement
+Open a cursor:
+
+The following statement opens a previously declared cursor.
+
+OPEN cursor_name
+Fetch the data into variables :
+
+This statement fetches the next row for the SELECT statement associated with the specified cursor (which must be open) and advances the cursor pointer. 
+If a row exists, the fetched columns are stored in the named variables. The number of columns retrieved by the SELECT statement must match 
+the number of output variables specified in the FETCH statement.
+
+FETCH [[NEXT] FROM] cursor_name 
+INTO var_name [, var_name] ...
+Close the cursor when done :
+
+This statement closes a previously opened cursor. An error occurs if the cursor is not open.
+
+CLOSE cursor_name
+Example:
+
+The procedure starts with three variable declarations. Incidentally, the order is important. First, declare variables. Then declare conditions.
+Then declare cursors. Then, declare handlers. If you put them in the wrong order, you will get an error message.
+
+CREATE TABLE GetVatsaCursor(  
+  C_ID INT PRIMARY KEY AUTO_INCREMENT,  
+  c_name VARCHAR(50),  
+  c_address VARCHAR(200)  
+);  
+  
+CREATE TABLE Vbackupdata(  
+  C_ID INT,  
+  c_name VARCHAR(50),  
+  c_address VARCHAR(200)  
+); 
+
+
+INSERT INTO GetVatsaCursor(c_name, c_address) VALUES('Test', '132, Vatsa Colony'),  
+  ('Admin', '133, Vatsa Colony'),  
+  ('Vatsa', '134, Vatsa Colony'),  
+  ('Onkar', '135, Vatsa Colony'),  
+  ('Rohit', '136, Vatsa Colony'),  
+  ('Simran', '137, Vatsa Colony'),  
+  ('Jashmin', '138, Vatsa Colony'),  
+  ('Anamika', '139, Vatsa Colony'),  
+  ('Radhika', '140, Vatsa Colony'); 
+  
+SELECT * FROM GetVatsaCursor;  
+SELECT * FROM Vbackupdata;
+
+#------------------------------------------------------------mysqlsampledatabase.sql--------------------------
+https://www.mysqltutorial.org/mysql-triggers/create-multiple-triggers-for-the-same-trigger-event-and-action-time/
+
+
+#-------------user defined variable-----------------
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_defined_variable`()
+BEGIN
+select @msrp:=max(msrp) from products; 
+END
+
+
+call user_defined_variable();
+
+
+
+SELECT 
+    productCode, productName, productLine, msrp
+FROM
+    products
+WHERE
+    msrp = @msrp;
+------------------------------------------------
+
+MySQL SELECT INTO Variable syntax
+To store query result in one or more variables, you use the SELECT INTO variable syntax:
+
+SELECT 
+    c1, c2, c3, ...
+INTO 
+    @v1, @v2, @v3,...
+FROM 
+    table_name
+WHERE 
+    condition;
+Code language: SQL (Structured Query Language) (sql)
+In this syntax:
+
+c1, c2, and c3 are columns or expressions that you want to select and store into the variables.
+@v1, @v2, and @v3 are the variables which store the values from c1, c2 and c3.
+The number of variables must be the same as the number of columns or expressions in the select list. In addition, the query must returns zero or one row.
+
+If the query return no rows, MySQL issues a warning of no data and the value of the variables remain unchanged.
+
+In case the query returns multiple rows, MySQL issues an error. 
+To ensure that the query always returns maximum one row, you use the LIMIT 1 clause to limit the result set to a single row.
+
+----------------------------------------------------if else-if
+
+CREATE PROCEDURE GetCustomerLevel(
+    IN  pCustomerNumber INT, 
+    OUT pCustomerLevel  VARCHAR(20))
+BEGIN
+    DECLARE credit DECIMAL DEFAULT 0;
+
+    SELECT creditLimit 
+    INTO credit
+    FROM customers
+    WHERE customerNumber = pCustomerNumber;
+
+    IF credit > 50000 THEN
+        SET pCustomerLevel = 'PLATINUM';
+    ELSEIF credit <= 50000 AND credit > 10000 THEN
+        SET pCustomerLevel = 'GOLD';
+    ELSE
+        SET pCustomerLevel = 'SILVER';
+    END IF;
+END $$
+
+CALL GetCustomerLevel(447, @level); 
+SELECT @level;
+
+
+
+
+
+------------------------------
+
+case----
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `case_stmt`(in pcust_no int,out pshipping varchar(50))
+BEGIN
+declare customerCountry varchar(100);
+SELECT 
+    country
+INTO customerCountry FROM
+    customers
+WHERE
+    customerNumber = pcust_no;
+case customerCountry
+when "USA" then set pshipping="2-day-shipping";
+when "Canada" then set pshipping="3-day-shipping";
+else set pshipping="5-day-shipping";
+end case;
+
+END
+
+
+CALL case_stmt(112,@shipping);
+select @case_stmt;
+
+
+Searched CASE statement
+The simple CASE statement only allows you to compare a value with a set of distinct values.
+
+To perform more complex matches such as ranges, you use the searched CASE statement. The searched CASE statement is equivalent to the IF  statement, 
+however, it’s much more readable than the IF statement.
+
+
+CREATE PROCEDURE searched_case(
+	IN pOrderNumber INT,
+    OUT pDeliveryStatus VARCHAR(100)
+)
+BEGIN
+	DECLARE waitingDay INT DEFAULT 0;
+    SELECT 
+		DATEDIFF(requiredDate, shippedDate)
+	INTO waitingDay
+	FROM orders
+    WHERE orderNumber = pOrderNumber;
+    
+    CASE 
+		WHEN waitingDay = 0 THEN 
+			SET pDeliveryStatus = 'On Time';
+        	WHEN waitingDay >= 1 AND waitingDay < 5 THEN
+			SET pDeliveryStatus = 'Late';
+		WHEN waitingDay >= 5 THEN
+			SET pDeliveryStatus = 'Very Late';
+		ELSE
+			SET pDeliveryStatus = 'No Information';
+	END CASE;	
+END$$
+DELIMITER ;
+
+CALL searched_case(10100,@delivery);
+
+
+MySQL CASE vs. IF
+Both IF and CASE statements allow you to execute a block of code based on a specific condition. Choosing between IF or CASE sometimes is just a matter of personal preference. Here are some guidelines:
+
+A simple CASE statement is more readable and efficient than an IF statement when you compare a single expression against a range of unique values.
+When you check complex expressions based on multiple values, the IF statement is easier to understand.
+If you use the CASE statement, you have to make sure that at least one of the CASE condition is matched. 
+Otherwise, you need to define an error handler to catch the error. Note that you do not have to do this with the IF statement.
+In some situations, you can use both IF and CASE to make the code more readable and efficient.
+
+
+#-------------------------------------------Loop-----------------------
+
+[label]: LOOP
+    ...
+    -- terminate the loop
+    IF condition THEN
+        LEAVE [label];
+    END IF;
+    ...
+END LOOP;
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `loopDemo`()
+BEGIN
+declare x int;
+declare s varchar(225);
+set x=1;
+set s="";
+loop_label : 
+loop 
+if x>10 then leave loop_label; 
+end if;
+set x=x+1;
+if (x mod 2) then iterate loop_label;
+else set s=concat(s,x,",");
+end if;
+end loop;
+select s;
+END
+
+call loopDemo();
+
+
+
+#--------------while loop syntax---------
+[begin_label:] WHILE search_condition DO
+    statement_list
+END WHILE [end_label]
+
+CREATE TABLE calendars(
+    id INT AUTO_INCREMENT,
+    fulldate DATE UNIQUE,
+    day TINYINT NOT NULL,
+    month TINYINT NOT NULL,
+    quarter TINYINT NOT NULL,
+    year INT NOT NULL,
+    PRIMARY KEY(id)
+);
+
+
+Second, create a new stored procedure to insert a date into the calendars table:
+
+
+
+CREATE PROCEDURE InsertCalendar(dt DATE)
+BEGIN
+    INSERT INTO calendars(
+        fulldate,
+        day,
+        month,
+        quarter,
+        year
+    )
+    VALUES(
+        dt, 
+        EXTRACT(DAY FROM dt),
+        EXTRACT(MONTH FROM dt),
+        EXTRACT(QUARTER FROM dt),
+        EXTRACT(YEAR FROM dt)
+    );
+END$$
+
+
+
+
+CREATE PROCEDURE LoadCalendars(
+    startDate DATE, 
+    day INT
+)
+BEGIN
+    
+    DECLARE counter INT DEFAULT 1;
+    DECLARE dt DATE DEFAULT startDate;
+
+    WHILE counter <= day DO
+        CALL InsertCalendar(dt);
+        SET counter = counter + 1;
+        SET dt = DATE_ADD(dt,INTERVAL 1 day);
+    END WHILE;
+
+END$$
+
+DELIMITER ;
+
+
+CALL LoadCalendars('2019-01-01',31);
+
+
+#---------------------------repeat loop---------------
+
+the MySQL REPEAT statement to execute one or more statements until a search condition is true.
+
+The REPEAT statement executes one or more statements until a search condition is true.
+
+Here is the basic syntax of the REPEAT loop statement:
+
+[begin_label:] REPEAT
+    statement
+UNTIL search_condition
+END REPEAT [end_label]
+
+This statement creates a stored procedure called RepeatDemo  that uses the REPEAT statement to concatenate numbers from 1 to 9:
+
+DELIMITER $$
+
+CREATE PROCEDURE RepeatDemo()
+BEGIN
+    DECLARE counter INT DEFAULT 1;
+    DECLARE result VARCHAR(100) DEFAULT '';
+    
+    REPEAT
+        SET result = CONCAT(result,counter,',');
+        SET counter = counter + 1;
+    UNTIL counter >= 10
+    END REPEAT;
+    
+    -- display result
+    SELECT result;
+END$$
+
+DELIMITER ;
+
+call RepeatDemo();
+
+
+#------------------------------------mysql cursor()---------------------------
+MySQL cursor in stored procedures to iterate through a result set returned by a SELECT statement.
+To handle a result set inside a stored procedure, you use a cursor. A cursor allows you to iterate a set of rows returned by a query and process each row individually.
+
+MySQL cursor is read-only, non-scrollable and asensitive.
+
+Read-only: you cannot update data in the underlying table through the cursor.
+Non-scrollable: you can only fetch rows in the order determined by the SELECT statement. You cannot fetch rows in the reversed order. 
+In addition, you cannot skip rows or jump to a specific row in the result set.
+Asensitive: there are two kinds of cursors: asensitive cursor and insensitive cursor. 
+An asensitive cursor points to the actual data, whereas an insensitive cursor uses a temporary copy of the data. An asensitive cursor performs faster than an insensitive cursor because it does not have to make a temporary copy of data. However, any change that made to the data from other connections will affect the data that is being used by an asensitive cursor, therefore, it is safer if you do not update the data that is being used by an asensitive cursor. MySQL cursor is asensitive.
+You can use MySQL cursors in stored procedures, stored functions, and triggers.
+
+Working with MySQL cursor
+First, declare a cursor by using the DECLARE statement:
+
+DECLARE cursor_name CURSOR FOR SELECT_statement;
+Code language: SQL (Structured Query Language) (sql)
+The cursor declaration must be after any variable declaration. If you declare a cursor before the variable declarations, MySQL will issue an error. A cursor must always associate with a SELECT statement.
+
+Next, open the cursor by using the OPEN statement. The OPEN statement initializes the result set for the cursor, therefore, you must call the OPEN statement before fetching rows from the result set.
+
+OPEN cursor_name;
+Code language: SQL (Structured Query Language) (sql)
+Then, use the FETCH statement to retrieve the next row pointed by the cursor and move the cursor to the next row in the result set.
+
+FETCH cursor_name INTO variables list;
+Code language: SQL (Structured Query Language) (sql)
+After that, check if there is any row available before fetching it.
+
+Finally, deactivate the cursor and release the memory associated with it  using the CLOSE statement:
+
+CLOSE cursor_name;
+Code language: SQL (Structured Query Language) (sql)
+It is a good practice to always close a cursor when it is no longer used.
+
+When working with MySQL cursor, you must also declare a NOT FOUND handler to handle the situation when the cursor could not find any row.
+
+Because each time you call the FETCH statement, the cursor attempts to read the next row in the result set. When the cursor reaches the end of the result set, 
+it will not be able to get the data, and a condition is raised. The handler is used to handle this condition.
+
+To declare a NOT FOUND handler, you use the following syntax:
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+Code language: SQL (Structured Query Language) (sql)
+The finished is a variable to indicate that the cursor has reached the end of the result set. 
+Notice that the handler declaration must appear after variable and cursor declaration inside the stored procedures.
+
+We will create a procedure and inside procedure we will write cursor object.
+
+
+DELIMITER $$
+CREATE PROCEDURE createEmailList (
+	INOUT emailList varchar(4000)
+)
+BEGIN
+	DECLARE finished INTEGER DEFAULT 0;
+	DECLARE emailAddress varchar(100) DEFAULT "";
+
+	-- declare cursor for employee email
+	DEClARE curEmail 
+		CURSOR FOR 
+			SELECT email FROM employees;
+
+	-- declare NOT FOUND handler
+	DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+
+	OPEN curEmail;
+
+	getEmail: LOOP
+		FETCH curEmail INTO emailAddress;
+		IF finished = 1 THEN 
+			LEAVE getEmail;
+		END IF;
+		-- build email list
+		SET emailList = CONCAT(emailAddress,";",emailList);
+	END LOOP getEmail;
+	CLOSE curEmail;
+
+END$$
+DELIMITER ;
+Code language: SQL (Structured Query Language) (sql)
+You can test the createEmailList stored procedure using the following script:
+
+SET @emailList = ""; 
+CALL createEmailList(@emailList); 
+SELECT @emailList;
+
+#----------------------- Stored Functions--------------------------------------
+
+ stored function is a special kind stored program that returns a single value. 
+Typically, you use stored functions to encapsulate common formulas or business rules that are reusable among SQL statements or stored programs.
+
+-------Different from a stored procedure, you can use a stored function in SQL statements wherever an expression is used. 
+This helps improve the readability and maintainability of the procedural code.
+
+To create a stored function, you use the CREATE FUNCTION statement.
+
+MySQL CREATE FUNCTION syntax
+The following illustrates the basic syntax for creating a new stored function:
+
+DELIMITER $$
+
+CREATE FUNCTION function_name(
+    param1,
+    param2,…
+)
+RETURNS datatype
+[NOT] DETERMINISTIC
+BEGIN
+ -- statements
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION function_name(
+    param1,
+    param2,…
+)
+RETURNS datatype
+[NOT] DETERMINISTIC
+BEGIN
+ -- statements
+END $$
+
+DELIMITER ;
+
+
+In this syntax:
+
+First, specify the name of the stored function that you want to create after CREATE FUNCTION  keywords.
+
+Second, list all parameters of the stored function inside the parentheses followed by the function name. 
+By default, all parameters are the IN parameters. You cannot specify IN , OUT or INOUT modifiers to parameters
+
+Third, specify the data type of the return value in the RETURNS statement, which can be any valid MySQL data types.
+
+Fourth, specify if a function is deterministic or not using the DETERMINISTIC keyword.
+
+A deterministic function always returns the same result for the same input parameters whereas 
+a non-deterministic function returns different results for the same input parameters.
+
+If you don’t use DETERMINISTIC or NOT DETERMINISTIC, MySQL uses the NOT DETERMINISTIC option by default.
+
+Fifth, write the code in the body of the stored function in the BEGIN END block. Inside the body section, you need to specify at least one RETURN statement. 
+The RETURN statement returns a value to the calling programs. Whenever the RETURN statement is reached, the execution of the stored function is terminated immediately.
+
+
+click on create functions------------------just like create stored procedure ---------------------
+
+DELIMITER $$
+
+CREATE FUNCTION CustomerLevel(
+	credit DECIMAL(10,2)
+) 
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+    DECLARE customerLevel VARCHAR(20);
+
+    IF credit > 50000 THEN
+		SET customerLevel = 'PLATINUM';
+    ELSEIF (credit >= 50000 AND 
+			credit <= 10000) THEN
+        SET customerLevel = 'GOLD';
+    ELSEIF credit < 10000 THEN
+        SET customerLevel = 'SILVER';
+    END IF;
+	-- return the customer level
+	RETURN (customerLevel);
+END$$
+DELIMITER ;
+
+
+Calling a stored function in an SQL statement
+The following statement uses the CustomerLevel stored function:
+
+SELECT 
+    customerName, 
+    CustomerLevel(creditLimit)
+FROM
+    customers
+ORDER BY 
+    customerName;
+
+----------------------------------------------Calling a stored function in a stored procedure
+
+The following statement creates a new stored procedure that calls the CustomerLevel() stored function:
+
+DELIMITER $$
+
+CREATE PROCEDURE GetCustomerLevel(
+    IN  customerNo INT,  
+    OUT customerLevel VARCHAR(20)
+)
+BEGIN
+
+	DECLARE credit DEC(10,2) DEFAULT 0;
+    
+    -- get credit limit of a customer
+    SELECT 
+		creditLimit 
+	INTO credit
+    FROM customers
+    WHERE 
+		customerNumber = customerNo;
+    
+    -- call the function 
+    SET customerLevel = CustomerLevel(credit);
+END$$
+
+--------------
+DELIMITER $$
+
+CREATE PROCEDURE GetCustomerLevel(
+    IN  customerNo INT,  
+    OUT customerLevel VARCHAR(20)
+)
+BEGIN
+
+	DECLARE credit DEC(10,2) DEFAULT 0;
+    
+    -- get credit limit of a customer
+    SELECT 
+		creditLimit 
+	INTO credit
+    FROM customers
+    WHERE 
+		customerNumber = customerNo;
+    
+    -- call the function 
+    SET customerLevel = CustomerLevel(credit);
+END$$
+
+DELIMITER ;
+
+CALL GetCustomerLevel(-131,@customerLevel);
+SELECT @customerLevel;
+
+
+
+#-----------------------------------MySQL Stored Procedures That Return Multiple Values------------------------------------------------
+
+how to develop stored procedures that return multiple values--
+
+MySQL stored function returns only one value. To develop stored programs that return multiple values, you need to use stored procedures with INOUT or OUT parameters.
+
+The following stored procedure accepts customer number and returns the total number of orders that were shipped, canceled, resolved, and disputed.
+
+DELIMITER $$
+
+CREATE PROCEDURE get_order_by_cust(
+	IN cust_no INT,
+	OUT shipped INT,
+	OUT canceled INT,
+	OUT resolved INT,
+	OUT disputed INT)
+BEGIN
+		-- shipped
+		SELECT
+            count(*) INTO shipped
+        FROM
+            orders
+        WHERE
+            customerNumber = cust_no
+                AND status = 'Shipped';
+
+		-- canceled
+		SELECT
+            count(*) INTO canceled
+        FROM
+            orders
+        WHERE
+            customerNumber = cust_no
+                AND status = 'Canceled';
+
+		-- resolved
+		SELECT
+            count(*) INTO resolved
+        FROM
+            orders
+        WHERE
+            customerNumber = cust_no
+                AND status = 'Resolved';
+
+		-- disputed
+		SELECT
+            count(*) INTO disputed
+        FROM
+            orders
+        WHERE
+            customerNumber = cust_no
+                AND status = 'Disputed';
+
+END
+
+
+call get_order_by_cust(141,@shipped,@canceled,@resolved,@disputed);
+select @shipped,@canceled,@resolved,@disputed;
+
+
+#------------------------------------------Trigger---------------------------
+
+In MySQL, a trigger is a stored program invoked automatically in response to an event such as insert, update, or delete that occurs in the associated table. 
+For example, you can define a trigger that is invoked automatically before a new row is inserted into a table.
+
+MySQL supports triggers that are invoked in response to the INSERT, UPDATE or DELETE event.
+
+The SQL standard defines two types of triggers: row-level triggers and statement-level triggers.
+
+A row-level trigger is activated for each row that is inserted, updated, or deleted.  For example, if a table has 100 rows inserted, updated, or deleted, 
+the trigger is automatically invoked 100 times for the 100 rows affected.
+A statement-level trigger is executed once for each transaction regardless of how many rows are inserted, updated, or deleted.
+MySQL supports only row-level triggers. It doesn’t support statement-level triggers.
+
+Advantages of triggers
+Triggers provide another way to check the integrity of data.
+Triggers handle errors from the database layer.
+Triggers give an alternative way to run scheduled tasks. By using triggers, you don’t have to wait for the scheduled events to run because the triggers are invoked automatically before or after a change is made to the data in a table.
+Triggers can be useful for auditing the data changes in tables.
+Disadvantages of triggers
+Triggers can only provide extended validations, not all validations. For simple validations, you can use the NOT NULL, UNIQUE, CHECK and FOREIGN KEY constraints.
+Triggers can be difficult to troubleshoot because they execute automatically in the database, which may not invisible to the client applications.
+Triggers may increase the overhead of the MySQL Server.
+Managing MySQL triggers
+Create triggers  – describe steps of how to create a trigger in MySQL.
+Drop triggers – show you how to drop a trigger.
+Create a BEFORE INSERT trigger – show you how to create a BEFORE INSERT trigger to maintain a summary table from another table.
+Create an AFTER INSERT trigger – describe how to create an AFTER INSERT trigger to insert data into a table after inserting data into another table.
+Create a BEFORE UPDATE trigger – learn how to create a BEFORE UPDATE trigger that validates data before it is updated to the table.
+Create an AFTER UPDATE trigger – show you how to create an AFTER UPDATE trigger to log the changes of data in a table.
+Create a BEFORE DELETE trigger – show how to create a BEFORE DELETE trigger.
+Create an AFTER DELETE trigger – describe how to create an AFTER DELETE trigger.
+Create multiple triggers for a table that have the same trigger event and time – MySQL 8.0 allows you to define multiple triggers for a table that have the same trigger event and time.
+Show triggers – list triggers in a database, table by specific patterns.
+
+CREATE TRIGGER trigger_name
+{BEFORE | AFTER} {INSERT | UPDATE| DELETE }
+ON table_name FOR EACH ROW
+trigger_body;
+
+
+CREATE TABLE employees_audit (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employeeNumber INT NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    changedat DATETIME DEFAULT NULL,
+    action VARCHAR(50) DEFAULT NULL
+);
+
+Next, create a BEFORE UPDATE trigger that is invoked before a change is made to the employees table.
+
+create trigger before_employee_update
+before update on employees 
+for each row 
+insert into employees_audit
+set action="update",
+employeeNumber=OLD.employeeNumber,
+lastname=OLD.lastname,
+changedat=NOW();
+
+
+UPDATE employees 
+SET 
+    lastName = 'Phan'
+WHERE
+    employeeNumber = 1056;
+    
+SELECT * FROM employees_audit;
+
+----
+CREATE TABLE billings (
+    billingNo INT AUTO_INCREMENT,
+    customerNo INT,
+    billingDate DATE,
+    amount DEC(10 , 2 ),
+    PRIMARY KEY (billingNo)
+);
+
+DELIMITER $$
+CREATE TRIGGER before_billing_update
+    BEFORE UPDATE 
+    ON billings FOR EACH ROW
+BEGIN
+    IF new.amount > old.amount * 10 THEN
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = 'New amount cannot be 10 times greater than the current amount.';
+    END IF;
+END$$    
+DELIMITER ;
+
+
+------------------------------------
+
+Introduction to MySQL BEFORE INSERT triggers
+MySQL BEFORE INSERT triggers are automatically fired before an insert event occurs on the table.
+
+The following illustrates the basic syntax of creating a MySQL BEFORE INSERT trigger:
+
+CREATE TRIGGER trigger_name
+    BEFORE INSERT
+    ON table_name FOR EACH ROW
+trigger_body;
+
+In this syntax:
+
+First, specify the name of the trigger that you want to create in the CREATE TRIGGER clause.
+
+Second, use BEFORE INSERT clause to specify the time to invoke the trigger.
+
+Third, specify the name of the table that the trigger is associated with after the ON keyword.
+
+Finally, specify the trigger body which contains one or more SQL statements that execute when the trigger is invoked.
+
+If you have multiple statements in the trigger_body, you have to use the BEGIN END block and change the default delimiter:
+
+DELIMITER $$
+
+CREATE TRIGGER trigger_name
+    BEFORE INSERT
+    ON table_name FOR EACH ROW
+BEGIN
+    -- statements
+END$$    
+
+DELIMITER ;
+Code language: SQL (Structured Query Language) (sql)
+Note that in a BEFORE INSERT trigger, you can access and change the NEW values. 
+However, you cannot access the OLD values because OLD values obviously do not exist.
+
+DROP TABLE IF EXISTS WorkCenters;
+
+CREATE TABLE WorkCenters (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    capacity INT NOT NULL
+);
+
+Second, create another table called WorkCenterStats that stores the summary of the capacity of the work centers:
+
+DROP TABLE IF EXISTS WorkCenterStats;
+
+CREATE TABLE WorkCenterStats(
+    totalCapacity INT NOT NULL
+);
+
+DROP TABLE IF EXISTS WorkCenterStats;
+
+CREATE TABLE WorkCenterStats(
+    totalCapacity INT NOT NULL
+);
+
+Now,creating before insert trigger example.--
+
+DELIMITER $$
+
+CREATE TRIGGER before_workcenters_insert
+BEFORE INSERT
+ON WorkCenters FOR EACH ROW
+BEGIN
+    DECLARE rowcount INT;
+    
+    SELECT COUNT(*) 
+    INTO rowcount
+    FROM WorkCenterStats;
+    
+    IF rowcount > 0 THEN
+        UPDATE WorkCenterStats
+        SET totalCapacity = totalCapacity + new.capacity;
+    ELSE
+        INSERT INTO WorkCenterStats(totalCapacity)
+        VALUES(new.capacity);
+    END IF; 
+
+END $$
+
+DELIMITER ;
+
+
+Testing the MySQL BEFORE INSERT trigger
+First, insert a new row into the WorkCenter table:
+
+Testing the MySQL BEFORE INSERT trigger
+First, insert a new row into the WorkCenter table:
+
+INSERT INTO WorkCenters(name, capacity)
+VALUES('Mold Machine',100);
+Code language: SQL (Structured Query Language) (sql)
+Second, query data from the WorkCenterStats table:
+
+SELECT * FROM WorkCenterStats;    
+Code language: SQL (Structured Query Language) (sql)
+
+The trigger has been invoked and inserted a new row into the WorkCenterStats table.
+
+Third, insert a new work center:
+
+INSERT INTO WorkCenters(name, capacity)
+VALUES('Packing',200);
+Code language: SQL (Structured Query Language) (sql)
+Finally, query data from the WorkCenterStats:
+
+SELECT * FROM WorkCenterStats;
+Code language: SQL (Structured Query Language) (sql)
+MySQL BEFORE INSERT Trigger Example 2
+The trigger has updated the total capacity from 100 to 200 as expected.
+
+Note that to properly maintain the summary table WorkCenterStats, you should also create triggers to handle update and delete events on the WorkCenters table.
+
+In this tutorial, you have learned how to create a MySQL BEFORE INSERT trigger to maintain a summary table of another table.
+
+
+#------------------ MySQL AFTER INSERT Trigger---------------------------------
+
+DROP TABLE IF EXISTS members;
+
+CREATE TABLE members (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255),
+    birthDate DATE,
+    PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS reminders;
+
+CREATE TABLE reminders (
+    id INT AUTO_INCREMENT,
+    memberId INT,
+    message VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id , memberId)
+);
+
+DELIMITER $$
+
+CREATE TRIGGER after_members_insert
+AFTER INSERT
+ON members FOR EACH ROW
+BEGIN
+    IF NEW.birthDate IS NULL THEN
+        INSERT INTO reminders(memberId, message)
+        VALUES(new.id,CONCAT('Hi ', NEW.name, ', please update your date of birth.'));
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+
+Testing the MySQL AFTER INSERT trigger
+First, insert two rows into the members table:
+
+INSERT INTO members(name, email, birthDate)
+VALUES
+    ('John Doe', 'john.doe@example.com', NULL),
+    ('Jane Doe', 'jane.doe@example.com','2000-01-01');
+
+select * from members;
+
+select * from reminders;
+
+
+
+#------------------------------- Introduction to MySQL BEFORE UPDATE triggers
+
+
+Introduction to MySQL BEFORE UPDATE triggers----
+
+DROP TABLE IF EXISTS sales;
+
+CREATE TABLE sales (
+    id INT AUTO_INCREMENT,
+    product VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL DEFAULT 0,
+    fiscalYear SMALLINT NOT NULL,
+    fiscalMonth TINYINT NOT NULL,
+    CHECK(fiscalMonth >= 1 AND fiscalMonth <= 12),
+    CHECK(fiscalYear BETWEEN 2000 and 2050),
+    CHECK (quantity >=0),
+    UNIQUE(product, fiscalYear, fiscalMonth),
+    PRIMARY KEY(id)
+);
+
+INSERT INTO sales(product, quantity, fiscalYear, fiscalMonth)
+VALUES
+    ('2003 Harley-Davidson Eagle Drag Bike',120, 2020,1),
+    ('1969 Corvair Monza', 150,2020,1),
+    ('1970 Plymouth Hemi Cuda', 200,2020,1);
+
+SELECT * FROM sales;
+
+
+DELIMITER $$
+
+CREATE TRIGGER before_sales_update
+BEFORE UPDATE
+ON sales FOR EACH ROW
+BEGIN
+    DECLARE errorMessage VARCHAR(255);
+    SET errorMessage = CONCAT('The new quantity ',
+                        NEW.quantity,
+                        ' cannot be 3 times greater than the current quantity ',
+                        OLD.quantity);
+                        
+    IF new.quantity > old.quantity * 3 THEN
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = errorMessage;
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+Testing the MySQL BEFORE UPDATE trigger
+First, update the quantity of the row with id 1 to 150:
+
+
+
+update sales set quantity=150 where id=1; 
+update sales set quantity=500 where id=1; 
+
+#----------------------mysql after update-------------
+
+DROP TABLE IF EXISTS Sales;
+
+CREATE TABLE Sales (
+    id INT AUTO_INCREMENT,
+    product VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL DEFAULT 0,
+    fiscalYear SMALLINT NOT NULL,
+    fiscalMonth TINYINT NOT NULL,
+    CHECK(fiscalMonth >= 1 AND fiscalMonth <= 12),
+    CHECK(fiscalYear BETWEEN 2000 and 2050),
+    CHECK (quantity >=0),
+    UNIQUE(product, fiscalYear, fiscalMonth),
+    PRIMARY KEY(id)
+);
+INSERT INTO Sales(product, quantity, fiscalYear, fiscalMonth)
+VALUES
+    ('2001 Ferrari Enzo',140, 2021,1),
+    ('1998 Chrysler Plymouth Prowler', 110,2021,1),
+    ('1913 Ford Model T Speedster', 120,2021,1);
+
+DROP TABLE IF EXISTS SalesChanges;
+
+CREATE TABLE SalesChanges (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    salesId INT,
+    beforeQuantity INT,
+    afterQuantity INT,
+    changedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+DELIMITER $$
+
+CREATE TRIGGER after_sales_update
+AFTER UPDATE
+ON sales FOR EACH ROW
+BEGIN
+    IF OLD.quantity <> new.quantity THEN
+        INSERT INTO SalesChanges(salesId,beforeQuantity, afterQuantity)
+        VALUES(old.id, old.quantity, new.quantity);
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+UPDATE Sales 
+SET quantity = 350
+WHERE id = 1;
+
+select * from SalesChanges;
+
+UPDATE Sales 
+SET quantity = CAST(quantity * 1.1 AS UNSIGNED);
+
+SELECT * FROM SalesChanges;
+
+
+#-------------------before delete example-----------------
+
+DROP TABLE IF EXISTS Salaries;
+
+CREATE TABLE Salaries (
+    employeeNumber INT PRIMARY KEY,
+    validFrom DATE NOT NULL,
+    amount DEC(12 , 2 ) NOT NULL DEFAULT 0
+);
+
+INSERT INTO salaries(employeeNumber,validFrom,amount)
+VALUES
+    (1002,'2000-01-01',50000),
+    (1056,'2000-01-01',60000),
+    (1076,'2000-01-01',70000);
+
+Third, create a table that stores the deleted salary:
+
+DROP TABLE IF EXISTS SalaryArchives;    
+
+CREATE TABLE SalaryArchives (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    employeeNumber INT PRIMARY KEY,
+    validFrom DATE NOT NULL,
+    amount DEC(12 , 2 ) NOT NULL DEFAULT 0,
+    deletedAt TIMESTAMP DEFAULT NOW()
+);
+
+DELIMITER $$
+
+CREATE TRIGGER before_salaries_delete
+BEFORE DELETE
+ON salaries FOR EACH ROW
+BEGIN
+    INSERT INTO SalaryArchives(employeeNumber,validFrom,amount)
+    VALUES(OLD.employeeNumber,OLD.validFrom,OLD.amount);
+END$$    
+
+DELIMITER ;
+
+
+DELETE FROM salaries 
+WHERE employeeNumber = 1002;
+
+SELECT * FROM SalaryArchives;    
+
+create table date_demo(d date default now());
+insert into date_demo values();
+select * from date_demo;
+
+create table time_demo(d timestamp default now());
+insert into time_demo values();
+select * from time_demo;
+
+DELETE FROM salaries;
+
+
+#-------------------- after trigger----------------------
+
+DROP TABLE IF EXISTS Salaries;
+
+CREATE TABLE Salaries (
+    employeeNumber INT PRIMARY KEY,
+    salary DECIMAL(10,2) NOT NULL DEFAULT 0
+);
+
+
+INSERT INTO Salaries(employeeNumber,salary)
+VALUES
+    (1002,5000),
+    (1056,7000),
+    (1076,8000);
+
+DROP TABLE IF EXISTS SalaryBudgets;
+
+CREATE TABLE SalaryBudgets(
+    total DECIMAL(15,2) NOT NULL
+);
+
+INSERT INTO SalaryBudgets(total)
+SELECT SUM(salary) 
+FROM Salaries;
+
+select * from Salaries;
+
+CREATE TRIGGER after_salaries_delete
+AFTER DELETE
+ON Salaries FOR EACH ROW
+UPDATE SalaryBudgets 
+SET total = total - old.salary;
+
+DELETE FROM Salaries
+WHERE employeeNumber = 1002;
+
+SELECT * FROM SalaryBudgets;    
+
+
+Creating multiple triggers----
+
+In this tutorial you will learn how to create multiple triggers for a table that have the same event and action time.
+Applicable only after 5.7.2+  allowed you to create multiple triggers for a given table that have the same event and action time. 
+These triggers will activate sequentially when an event occurs.
+
+DELIMITER $$
+
+CREATE TRIGGER trigger_name
+{BEFORE|AFTER}{INSERT|UPDATE|DELETE} 
+ON table_name FOR EACH ROW 
+{FOLLOWS|PRECEDES} existing_trigger_name
+BEGIN
+    -- statements
+END$$
+
+DELIMITER ;
+
+In this syntax, the FOLLOWS or PRECEDES specifies whether the new trigger should be invoked before or after an existing trigger.
+
+The FOLLOWS  allows the new trigger to activate after an existing trigger.
+The PRECEDES  allows the new trigger to activate before an existing trigger.
+
+#--How To Call a Stored Procedure From a Trigger in MySQL---
+
+MySQL allows you to call a stored procedure from a trigger by using the CALL statement. By doing this, you can reuse the same stored procedure in several triggers.
+
+However, the trigger cannot call a stored procedure that has OUT or INOUT parameters or a stored procedure that uses dynamic SQL.
+
+DROP TABLE IF EXISTS accounts;
+
+CREATE TABLE accounts (
+    accountId INT AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    amount DECIMAL(10 , 2 ) NOT NULL ,
+    PRIMARY KEY (accountId),
+    CHECK(amount >= 0) 
+);
+
+INSERT INTO accounts(name, amount)
+VALUES
+    ('John Doe', 1000),
+    ('Jane Bush', 500);
+
+DELIMITER $$
+
+CREATE PROCEDURE Withdraw(
+    fromAccountId INT, 
+    withdrawAmount DEC(10,2)
+)
+BEGIN
+    IF withdrawAmount <= 0 THEN
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = 'The withdrawal amount must be greater than zero';
+    END IF;
+    
+    UPDATE accounts 
+    SET amount = amount - withdrawAmount
+    WHERE accountId = fromAccountId;
+END$$
+
+DELIMITER ;
+
+
+Create a stored procedure that checks the withdrawal
+The following statement creates a stored procedure that checks the withdrawal from an account:
+
+DELIMITER $$
+
+CREATE PROCEDURE CheckWithdrawal(
+    fromAccountId INT,
+    withdrawAmount DEC(10,2)
+)
+BEGIN
+    DECLARE balance DEC(10,2);
+    DECLARE withdrawableAmount DEC(10,2);
+    DECLARE message VARCHAR(255);
+
+    -- get current balance of the account
+    SELECT amount 
+    INTO balance
+    FROM accounts
+    WHERE accountId = fromAccountId;
+    
+    -- Set minimum balance
+    SET withdrawableAmount = balance - 25;
+
+    IF withdrawAmount > withdrawableAmount THEN
+        SET message = CONCAT('Insufficient amount, the maximum withdrawable is ', withdrawableAmount);
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = message;
+    END IF;
+END$$
+
+DELIMITER ;
+Code language: SQL (Structured Query Language) (sql)
+In this stored procedure:
+
+First, get the current balance of the account.
+Second, set the withdrawable amount. The minimum balance of the account must be 25.
+Third, raise an error if the withdrawal amount is greater than the withdrawable amount.
+
+Create a trigger that calls a stored procedure
+The following statement creates a BEFORE UPDATE trigger that calls the stored procedure CheckWithdrawal:
+
+DELIMITER $$
+
+CREATE TRIGGER before_accounts_update
+BEFORE UPDATE
+ON accounts FOR EACH ROW
+BEGIN
+    CALL CheckWithdrawal (
+        OLD.accountId, 
+        OLD.amount - NEW.amount
+    );
+END$$
+
+DELIMITER ;
+
+Testing the transactions
+First, withdraw 400 from the account id 1:
+
+CALL withdraw(1, 400);
+SELECT * FROM accounts
+WHERE accountId = 1;
+
+CALL withdraw(1, 600);
+CALL withdraw(1, 575);
+
+SELECT * 
+FROM accounts
+WHERE accountId = 1;
+
 
 
 

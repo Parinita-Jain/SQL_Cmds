@@ -127,7 +127,7 @@ select roll,marks from student_demo order by marks;
 select roll,marks from student_demo order by marks desc;
 select * from student_demo order by marks desc limit 1;
 select addr from student_demo order by marks desc limit 3;
-select addr from student_demo order by marks desc limit 1,2;
+select addr from student_demo order by marks desc limit 1,3;
 
 select * from student_demo where marks is null;
 select * from student_demo order by marks;
@@ -327,6 +327,14 @@ desc product1;
 
 insert into product1 values(1,"A",100),(2,"B",200);
 
+alter table product1 add column email varchar(100);
+desc product1;
+alter table product1 drop column email;
+desc product1;
+
+ALTER TABLE product1 change column id pid int;
+
+desc product1;
 select * from product1;
 truncate table product1;
 select * from product1;
@@ -432,6 +440,7 @@ select sysdate();
 select month(sysdate());
 select adddate(sysdate(),2);
 select adddate(sysdate(),-2);
+select date_add(sysdate(),interval 2 month);
 select datediff(sysdate(),'2020-12-09');
 select timestampdiff(day,'2020-12-09',sysdate());
 
@@ -450,6 +459,7 @@ select date_format(sysdate(),'%D of the %M %Y,%W') as Date;
 select date_format(sysdate(),'%h:%i:%s %p');
 
 #------------------group by having------------
+
 create table cust_gh(
 id int,fname varchar(20),lname varchar(20),age int,
 country varchar(20)
