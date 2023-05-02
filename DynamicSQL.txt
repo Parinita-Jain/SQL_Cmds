@@ -1,0 +1,1559 @@
+https://www.mysqltutorial.org/mysql-triggers/create-multiple-triggers-for-the-same-trigger-event-and-action-time/
+
+#---------------------------procedure-------
+select version();
+
+show privileges;
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `order_data`()
+BEGIN
+select * from orders;
+END
+
+call order_data();
+========================================================
+
+#In MySQL stored procedures, user variables are referenced with an ampersand (@) prefixed 
+#to the user variable name (for example, @x and @y).
+
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `my_procedure_Local_Variables`()
+BEGIN   /* declare local variables */   
+DECLARE a INT DEFAULT 10;   
+DECLARE b, c INT;    /* using the local variables */   
+SET a = a + 100;   
+SET b = 2;   
+SET c = a + b;    
+BEGIN      /* local variable in nested block */      
+DECLARE c INT;             
+SET c = 5;       
+/* local variable c takes precedence over the one of the          
+same name declared in the enclosing block. */       
+SELECT a, b, c;   
+END;    
+SELECT a, b, c;
+BEGIN   
+SET @x = 15;       
+SET @y = 10;       
+SELECT @x, @y, @x-@y;
+END;
+
+END
+
+call my_procedure_Local_Variables();
+=========================================================
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `my_proc_IN`(IN var1 int)
+BEGIN
+select * from salesman limit var1;
+END
+
+call my_proc_IN(2);
+
+====================================
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `out_p`(out cnt int)
+BEGIN
+select count(ord_no) into cnt from orders;
+END
+
+
+call out_p(@M);
+select @M as count;
+===============================================
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `out_w3`(out highest_amt int)
+BEGIN
+select max(purch_amt) into highest_amt from orders;
+END
+
+call out_w3(@M);
+select @M as count;
+
+
+==========================
+CREATE DEFINER=`root`@`localhost` PROCEDURE `my_proc_inout`(inout gr int,in c varchar(20))
+BEGIN
+select count(city) into gr from customer where city=c;
+END
+
+
+# inout-----
+call my_proc_inout(@c,"Moscow");
+select @c as count;
+select * from customer;
+
+
+==========================================
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `elseif_try`(inout result varchar(20),in n1 int,in n2 int)
+BEGIN
+if n1>n2
+then
+ select "n1 > n2" into result;
+elseif n2>n1
+ then
+ select "n2>n1" into result;
+elseif n2=n1
+then
+select "n2=n1" into result;
+elseif n1<0
+then
+select "n1<0" into result;
+else
+select "Hello" into result;
+
+ end if;
+END
+
+call elseif_try(30,30);
+call elseif_try(@d,30,40);
+select @d;
+
+call elseif_try(@d,-3,40);
+select @d;
+
+#-----------------------------------------when case
+
+create table jobs(job_id varchar(20),job_title varchar(30),
+min_salary int, max_salary int);
+insert into jobs(job_id,job_title,
+min_salary, max_salary ) values
+("AD_PRES","President",20000,40000),
+("AD_VP","Administration Vice President",15000,30000),("AD_ASST","Administration Assistant",3000,6000),
+("FI_MGR","Finance Manager",8200,16000),
+("FI_ACCOUNT","Accountant",4200,9000),
+("AC_MGR","Accounting Manager",8200,16000),
+("AC_ACCOUNT","Public Accountant",4200,9000),
+("SA_MAN","Sales Manager",10000,20000),
+("SA_REP","Sales Representative",6000,12000),
+("PU_MAN","Purchasing Manager",8000,15000),
+("PU_CLERK","Purchasing Clerk",2500,5500),("ST_MAN","Stock Manager",5500,8500),
+("ST_CLERK","Stock Clerk",2000,5000),
+("SH_CLERK","Shipping Clerk",2500,5500),("IT_PROG" ,"Programmer",4000,10000),
+("MK_MAN","Marketing Manager",9000,15000),
+("MK_REP","Marketing Representative",4000,9000),
+("HR_REP","Human Resources Representative",4000,9000),
+("PR_REP","Public Relations Representative",4500,10500); 
+=========================================
+
+
+
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `my_proc_case`(inout no_emp int,in salary int)
+BEGIN
+case 
+when (salary>10000)
+then select count(job_id) into no_emp from jobs where min_salary>10000;
+when (salary<10000)
+then select count(job_id) into no_emp from jobs where min_salary<10000;
+else select count(job_id) into no_emp from jobs where min_salary=10000;
+end case;
+END
+
+
+select * from jobs;
+call my_proc_case(@c,10000);
+select @c;
+
+============================================
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `loop_proc`(in num int)
+BEGIN
+declare x int;
+set x=0;
+loop_label: loop
+insert into num value (x);
+set x=x+1;
+if x>=num
+then leave loop_label;
+end if;
+end loop;
+END
+
+create table num(i int);
+call loop_proc(5);
+select * from num;
+
+
+======================================================
+
+MySQL: REPEAT Statement
+
+The REPEAT statement executes the statement(s) repeatedly as long as the condition is true. The condition is checked every time at the end of the statements.
+
+[begin_label:] 
+REPEAT     
+statement_list 
+UNTIL search_condition 
+END 
+REPEAT 
+[end_label]
+statement_list: List of one or more statements, each statement terminated by a semicolon(;).
+search_condition : An expression.
+
+A REPEAT statement can be labeled.
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `repeat_proc`(in n int)
+BEGIN
+set @sum=0;
+set @x=1;
+repeat 
+if mod(@x,2)=0
+then set @sum=@sum+@x;
+end if;
+set @x=@x+1;
+until @x>n
+end repeat;
+END
+
+call repeat_proc(10);
+select @sum;
+
+#----------------------------------------------
+MySQL: RETURN Statement
+
+The RETURN statement terminates execution of a stored function and returns the value expr to the function caller. 
+There must be at least one RETURN statement in a stored function. There may be more than one if the function has multiple exit points. 
+
+RETURN expr
+
+This statement is not used in stored procedures or triggers. The LEAVE statement can be used to exit a stored program of those types.
+#-----------------------------------------------
+MySQL : WHILE Statement
+
+The WHILE statement executes the statement(s) as long as the condition is true. The condition is checked every time at the beginning of the loop. 
+Each statement is terminated by a semicolon (;). Here is the syntax:
+
+[begin_label:] WHILE search_condition DO
+    statement_list
+END WHILE [end_label]
+A WHILE statement can be labeled.
+
+Example:
+
+Odd numbers are numbers that cannot be divided exactly by 2. In the following procedure, 
+a user passes a number through IN parameter and make a sum of odd numbers between 1 and that particular number.
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `while_procedure`(in n int)
+BEGIN
+set @sum=0;
+set @x=1;
+while @x<n
+do 
+if mod(@x,2)<>0 then
+set @sum=@sum + @x;
+end if;
+set @x=@x+1;
+end while; 
+END
+
+
+call while_procedure(10);
+select @sum;
+
+=================================================================
+MySQL: ALTER PROCEDURE
+
+This statement can be used to change the characteristics of a stored procedure. More than one change may be specified in an ALTER PROCEDURE statement. However, you cannot change the parameters or body of a stored procedure using this statement; to make such changes, you must drop and re-create the procedure using DROP PROCEDURE and CREATE PROCEDURE. Here is the syntax :
+
+ALTER PROCEDURE proc_name [characteristic ...]characteristic:    
+COMMENT 'string'  
+| LANGUAGE SQL  
+| { CONTAINS SQL 
+| NO SQL | READS SQL DATA 
+| MODIFIES SQL DATA }  
+| SQL SECURITY { DEFINER 
+| INVOKER }
+You must have the ALTER ROUTINE privilege for the procedure. By default, that privilege is granted automatically to the procedure creator. In our previous procedure "my_proc_WHILE" the comment section was empty. To input new comment or modify the previous comment use the following command :
+
+mysql> ALTER PROCEDURE my_proc_WHILE 
+COMMENT 'Modify Comment';
+>Query OK, 0 rows affected (0.20 sec)
+You can check the result through SHOW CREATE PROCEDURE command which we have discussed earlier.
+
+MySQL: DROP PROCEDURE
+
+This statement is used to drop a stored procedure or function. That is, the specified routine is removed from the server. You must have the ALTER ROUTINE privilege for the routine. (If the automatic_sp_privileges system variable is enabled, that privilege and EXECUTE are granted automatically to the routine creator when the routine is created and dropped from the creator when the routine is dropped
+
+DROP {PROCEDURE | FUNCTION} [IF EXISTS] sp_name
+The IF EXISTS clause is a MySQL extension. It prevents an error from occurring if the procedure or function does not exist. A warning is produced that can be viewed with SHOW WARNINGS. Here is an example:
+
+mysql> DROP PROCEDURE new_procedure;
+Query OK, 0 rows affected (0.05 sec)
+
+#---------------------------------------------------------Cursor----------------------------------
+
+MySQL: Cursors
+
+A database cursor is a control structure that enables traversal over the records in a database. Cursors are used by database programmers to process individual rows returned by database system queries. Cursors enable manipulation of whole result sets at once. In this scenario, a cursor enables the rows in a result set to be processed sequentially. In SQL procedures, a cursor makes it possible to define a result set (a set of data rows) and perform complex logic on a row by row basis. By using the same mechanics, an SQL procedure can also define a result set and return it directly to the caller of the SQL procedure or to a client application.
+
+MySQL supports cursors inside stored programs. The syntax is as in embedded SQL. Cursors have these properties :
+- Asensitive: The server may or may not make a copy of its result table
+- Read only: Not updatable
+- Nonscrollable: Can be traversed only in one direction and cannot skip rows
+
+To use cursors in MySQL procedures, you need to do the following :
+- Declare a cursor.
+- Open a cursor.
+- Fetch the data into variables.
+- Close the cursor when done.
+
+Declare a cursor:
+
+The following statement declares a cursor and associates it with a SELECT statement that retrieves the rows to be traversed by the cursor.
+
+DECLARE cursor_name 
+CURSOR FOR select_statement
+Open a cursor:
+
+The following statement opens a previously declared cursor.
+
+OPEN cursor_name
+Fetch the data into variables :
+
+This statement fetches the next row for the SELECT statement associated with the specified cursor (which must be open) and advances the cursor pointer. 
+If a row exists, the fetched columns are stored in the named variables. The number of columns retrieved by the SELECT statement must match 
+the number of output variables specified in the FETCH statement.
+
+FETCH [[NEXT] FROM] cursor_name 
+INTO var_name [, var_name] ...
+Close the cursor when done :
+
+This statement closes a previously opened cursor. An error occurs if the cursor is not open.
+
+CLOSE cursor_name
+Example:
+
+The procedure starts with three variable declarations. Incidentally, the order is important. First, declare variables. Then declare conditions.
+Then declare cursors. Then, declare handlers. If you put them in the wrong order, you will get an error message.
+
+CREATE TABLE GetVatsaCursor(  
+  C_ID INT PRIMARY KEY AUTO_INCREMENT,  
+  c_name VARCHAR(50),  
+  c_address VARCHAR(200)  
+);  
+  
+CREATE TABLE Vbackupdata(  
+  C_ID INT,  
+  c_name VARCHAR(50),  
+  c_address VARCHAR(200)  
+); 
+
+
+INSERT INTO GetVatsaCursor(c_name, c_address) VALUES('Test', '132, Vatsa Colony'),  
+  ('Admin', '133, Vatsa Colony'),  
+  ('Vatsa', '134, Vatsa Colony'),  
+  ('Onkar', '135, Vatsa Colony'),  
+  ('Rohit', '136, Vatsa Colony'),  
+  ('Simran', '137, Vatsa Colony'),  
+  ('Jashmin', '138, Vatsa Colony'),  
+  ('Anamika', '139, Vatsa Colony'),  
+  ('Radhika', '140, Vatsa Colony'); 
+  
+SELECT * FROM GetVatsaCursor;  
+SELECT * FROM Vbackupdata;
+
+#------------------------------------------------------------mysqlsampledatabase.sql--------------------------
+https://www.mysqltutorial.org/mysql-triggers/create-multiple-triggers-for-the-same-trigger-event-and-action-time/
+
+
+#-------------user defined variable-----------------
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_defined_variable`()
+BEGIN
+select @msrp:=max(msrp) from products; 
+END
+
+
+call user_defined_variable();
+
+
+
+SELECT 
+    productCode, productName, productLine, msrp
+FROM
+    products
+WHERE
+    msrp = @msrp;
+------------------------------------------------
+
+MySQL SELECT INTO Variable syntax
+To store query result in one or more variables, you use the SELECT INTO variable syntax:
+
+SELECT 
+    c1, c2, c3, ...
+INTO 
+    @v1, @v2, @v3,...
+FROM 
+    table_name
+WHERE 
+    condition;
+Code language: SQL (Structured Query Language) (sql)
+In this syntax:
+
+c1, c2, and c3 are columns or expressions that you want to select and store into the variables.
+@v1, @v2, and @v3 are the variables which store the values from c1, c2 and c3.
+The number of variables must be the same as the number of columns or expressions in the select list. In addition, the query must returns zero or one row.
+
+If the query return no rows, MySQL issues a warning of no data and the value of the variables remain unchanged.
+
+In case the query returns multiple rows, MySQL issues an error. 
+To ensure that the query always returns maximum one row, you use the LIMIT 1 clause to limit the result set to a single row.
+
+----------------------------------------------------if else-if
+
+CREATE PROCEDURE GetCustomerLevel(
+    IN  pCustomerNumber INT, 
+    OUT pCustomerLevel  VARCHAR(20))
+BEGIN
+    DECLARE credit DECIMAL DEFAULT 0;
+
+    SELECT creditLimit 
+    INTO credit
+    FROM customers
+    WHERE customerNumber = pCustomerNumber;
+
+    IF credit > 50000 THEN
+        SET pCustomerLevel = 'PLATINUM';
+    ELSEIF credit <= 50000 AND credit > 10000 THEN
+        SET pCustomerLevel = 'GOLD';
+    ELSE
+        SET pCustomerLevel = 'SILVER';
+    END IF;
+END $$
+
+CALL GetCustomerLevel(447, @level); 
+SELECT @level;
+
+
+
+
+
+------------------------------
+
+case----
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `case_stmt`(in pcust_no int,out pshipping varchar(50))
+BEGIN
+declare customerCountry varchar(100);
+SELECT 
+    country
+INTO customerCountry FROM
+    customers
+WHERE
+    customerNumber = pcust_no;
+case customerCountry
+when "USA" then set pshipping="2-day-shipping";
+when "Canada" then set pshipping="3-day-shipping";
+else set pshipping="5-day-shipping";
+end case;
+
+END
+
+
+CALL case_stmt(112,@shipping);
+select @case_stmt;
+
+
+Searched CASE statement
+The simple CASE statement only allows you to compare a value with a set of distinct values.
+
+To perform more complex matches such as ranges, you use the searched CASE statement. The searched CASE statement is equivalent to the IF  statement, 
+however, it’s much more readable than the IF statement.
+
+
+CREATE PROCEDURE searched_case(
+	IN pOrderNumber INT,
+    OUT pDeliveryStatus VARCHAR(100)
+)
+BEGIN
+	DECLARE waitingDay INT DEFAULT 0;
+    SELECT 
+		DATEDIFF(requiredDate, shippedDate)
+	INTO waitingDay
+	FROM orders
+    WHERE orderNumber = pOrderNumber;
+    
+    CASE 
+		WHEN waitingDay = 0 THEN 
+			SET pDeliveryStatus = 'On Time';
+        	WHEN waitingDay >= 1 AND waitingDay < 5 THEN
+			SET pDeliveryStatus = 'Late';
+		WHEN waitingDay >= 5 THEN
+			SET pDeliveryStatus = 'Very Late';
+		ELSE
+			SET pDeliveryStatus = 'No Information';
+	END CASE;	
+END$$
+DELIMITER ;
+
+CALL searched_case(10100,@delivery);
+
+
+MySQL CASE vs. IF
+Both IF and CASE statements allow you to execute a block of code based on a specific condition. Choosing between IF or CASE sometimes is just a matter of personal preference. Here are some guidelines:
+
+A simple CASE statement is more readable and efficient than an IF statement when you compare a single expression against a range of unique values.
+When you check complex expressions based on multiple values, the IF statement is easier to understand.
+If you use the CASE statement, you have to make sure that at least one of the CASE condition is matched. 
+Otherwise, you need to define an error handler to catch the error. Note that you do not have to do this with the IF statement.
+In some situations, you can use both IF and CASE to make the code more readable and efficient.
+
+
+#-------------------------------------------Loop-----------------------
+
+[label]: LOOP
+    ...
+    -- terminate the loop
+    IF condition THEN
+        LEAVE [label];
+    END IF;
+    ...
+END LOOP;
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `loopDemo`()
+BEGIN
+declare x int;
+declare s varchar(225);
+set x=1;
+set s="";
+loop_label : 
+loop 
+if x>10 then leave loop_label; 
+end if;
+set x=x+1;
+if (x mod 2) then iterate loop_label;
+else set s=concat(s,x,",");
+end if;
+end loop;
+select s;
+END
+
+call loopDemo();
+
+
+
+#--------------while loop syntax---------
+[begin_label:] WHILE search_condition DO
+    statement_list
+END WHILE [end_label]
+
+CREATE TABLE calendars(
+    id INT AUTO_INCREMENT,
+    fulldate DATE UNIQUE,
+    day TINYINT NOT NULL,
+    month TINYINT NOT NULL,
+    quarter TINYINT NOT NULL,
+    year INT NOT NULL,
+    PRIMARY KEY(id)
+);
+
+
+Second, create a new stored procedure to insert a date into the calendars table:
+
+
+
+CREATE PROCEDURE InsertCalendar(dt DATE)
+BEGIN
+    INSERT INTO calendars(
+        fulldate,
+        day,
+        month,
+        quarter,
+        year
+    )
+    VALUES(
+        dt, 
+        EXTRACT(DAY FROM dt),
+        EXTRACT(MONTH FROM dt),
+        EXTRACT(QUARTER FROM dt),
+        EXTRACT(YEAR FROM dt)
+    );
+END$$
+
+
+
+
+CREATE PROCEDURE LoadCalendars(
+    startDate DATE, 
+    day INT
+)
+BEGIN
+    
+    DECLARE counter INT DEFAULT 1;
+    DECLARE dt DATE DEFAULT startDate;
+
+    WHILE counter <= day DO
+        CALL InsertCalendar(dt);
+        SET counter = counter + 1;
+        SET dt = DATE_ADD(dt,INTERVAL 1 day);
+    END WHILE;
+
+END$$
+
+DELIMITER ;
+
+
+CALL LoadCalendars('2019-01-01',31);
+
+
+#---------------------------repeat loop---------------
+
+the MySQL REPEAT statement to execute one or more statements until a search condition is true.
+
+The REPEAT statement executes one or more statements until a search condition is true.
+
+Here is the basic syntax of the REPEAT loop statement:
+
+[begin_label:] REPEAT
+    statement
+UNTIL search_condition
+END REPEAT [end_label]
+
+This statement creates a stored procedure called RepeatDemo  that uses the REPEAT statement to concatenate numbers from 1 to 9:
+
+DELIMITER $$
+
+CREATE PROCEDURE RepeatDemo()
+BEGIN
+    DECLARE counter INT DEFAULT 1;
+    DECLARE result VARCHAR(100) DEFAULT '';
+    
+    REPEAT
+        SET result = CONCAT(result,counter,',');
+        SET counter = counter + 1;
+    UNTIL counter >= 10
+    END REPEAT;
+    
+    -- display result
+    SELECT result;
+END$$
+
+DELIMITER ;
+
+call RepeatDemo();
+
+
+#------------------------------------mysql cursor()---------------------------
+MySQL cursor in stored procedures to iterate through a result set returned by a SELECT statement.
+To handle a result set inside a stored procedure, you use a cursor. A cursor allows you to iterate a set of rows returned by a query and process each row individually.
+
+MySQL cursor is read-only, non-scrollable and asensitive.
+
+Read-only: you cannot update data in the underlying table through the cursor.
+Non-scrollable: you can only fetch rows in the order determined by the SELECT statement. You cannot fetch rows in the reversed order. 
+In addition, you cannot skip rows or jump to a specific row in the result set.
+Asensitive: there are two kinds of cursors: asensitive cursor and insensitive cursor. 
+An asensitive cursor points to the actual data, whereas an insensitive cursor uses a temporary copy of the data. An asensitive cursor performs faster than an insensitive cursor because it does not have to make a temporary copy of data. However, any change that made to the data from other connections will affect the data that is being used by an asensitive cursor, therefore, it is safer if you do not update the data that is being used by an asensitive cursor. MySQL cursor is asensitive.
+You can use MySQL cursors in stored procedures, stored functions, and triggers.
+
+Working with MySQL cursor
+First, declare a cursor by using the DECLARE statement:
+
+DECLARE cursor_name CURSOR FOR SELECT_statement;
+Code language: SQL (Structured Query Language) (sql)
+The cursor declaration must be after any variable declaration. If you declare a cursor before the variable declarations, MySQL will issue an error. A cursor must always associate with a SELECT statement.
+
+Next, open the cursor by using the OPEN statement. The OPEN statement initializes the result set for the cursor, therefore, you must call the OPEN statement before fetching rows from the result set.
+
+OPEN cursor_name;
+Code language: SQL (Structured Query Language) (sql)
+Then, use the FETCH statement to retrieve the next row pointed by the cursor and move the cursor to the next row in the result set.
+
+FETCH cursor_name INTO variables list;
+Code language: SQL (Structured Query Language) (sql)
+After that, check if there is any row available before fetching it.
+
+Finally, deactivate the cursor and release the memory associated with it  using the CLOSE statement:
+
+CLOSE cursor_name;
+Code language: SQL (Structured Query Language) (sql)
+It is a good practice to always close a cursor when it is no longer used.
+
+When working with MySQL cursor, you must also declare a NOT FOUND handler to handle the situation when the cursor could not find any row.
+
+Because each time you call the FETCH statement, the cursor attempts to read the next row in the result set. When the cursor reaches the end of the result set, 
+it will not be able to get the data, and a condition is raised. The handler is used to handle this condition.
+
+To declare a NOT FOUND handler, you use the following syntax:
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+Code language: SQL (Structured Query Language) (sql)
+The finished is a variable to indicate that the cursor has reached the end of the result set. 
+Notice that the handler declaration must appear after variable and cursor declaration inside the stored procedures.
+
+We will create a procedure and inside procedure we will write cursor object.
+
+
+DELIMITER $$
+CREATE PROCEDURE createEmailList (
+	INOUT emailList varchar(4000)
+)
+BEGIN
+	DECLARE finished INTEGER DEFAULT 0;
+	DECLARE emailAddress varchar(100) DEFAULT "";
+
+	-- declare cursor for employee email
+	DEClARE curEmail 
+		CURSOR FOR 
+			SELECT email FROM employees;
+
+	-- declare NOT FOUND handler
+	DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+
+	OPEN curEmail;
+
+	getEmail: LOOP
+		FETCH curEmail INTO emailAddress;
+		IF finished = 1 THEN 
+			LEAVE getEmail;
+		END IF;
+		-- build email list
+		SET emailList = CONCAT(emailAddress,";",emailList);
+	END LOOP getEmail;
+	CLOSE curEmail;
+
+END$$
+DELIMITER ;
+Code language: SQL (Structured Query Language) (sql)
+You can test the createEmailList stored procedure using the following script:
+
+SET @emailList = ""; 
+CALL createEmailList(@emailList); 
+SELECT @emailList;
+
+#----------------------- Stored Functions--------------------------------------
+
+ stored function is a special kind stored program that returns a single value. 
+Typically, you use stored functions to encapsulate common formulas or business rules that are reusable among SQL statements or stored programs.
+
+-------Different from a stored procedure, you can use a stored function in SQL statements wherever an expression is used. 
+This helps improve the readability and maintainability of the procedural code.
+
+To create a stored function, you use the CREATE FUNCTION statement.
+
+MySQL CREATE FUNCTION syntax
+The following illustrates the basic syntax for creating a new stored function:
+
+DELIMITER $$
+
+CREATE FUNCTION function_name(
+    param1,
+    param2,…
+)
+RETURNS datatype
+[NOT] DETERMINISTIC
+BEGIN
+ -- statements
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION function_name(
+    param1,
+    param2,…
+)
+RETURNS datatype
+[NOT] DETERMINISTIC
+BEGIN
+ -- statements
+END $$
+
+DELIMITER ;
+
+
+In this syntax:
+
+First, specify the name of the stored function that you want to create after CREATE FUNCTION  keywords.
+
+Second, list all parameters of the stored function inside the parentheses followed by the function name. 
+By default, all parameters are the IN parameters. You cannot specify IN , OUT or INOUT modifiers to parameters
+
+Third, specify the data type of the return value in the RETURNS statement, which can be any valid MySQL data types.
+
+Fourth, specify if a function is deterministic or not using the DETERMINISTIC keyword.
+
+A deterministic function always returns the same result for the same input parameters whereas 
+a non-deterministic function returns different results for the same input parameters.
+
+If you don’t use DETERMINISTIC or NOT DETERMINISTIC, MySQL uses the NOT DETERMINISTIC option by default.
+
+Fifth, write the code in the body of the stored function in the BEGIN END block. Inside the body section, you need to specify at least one RETURN statement. 
+The RETURN statement returns a value to the calling programs. Whenever the RETURN statement is reached, the execution of the stored function is terminated immediately.
+
+
+click on create functions------------------just like create stored procedure ---------------------
+
+DELIMITER $$
+
+CREATE FUNCTION CustomerLevel(
+	credit DECIMAL(10,2)
+) 
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+    DECLARE customerLevel VARCHAR(20);
+
+    IF credit > 50000 THEN
+		SET customerLevel = 'PLATINUM';
+    ELSEIF (credit >= 50000 AND 
+			credit <= 10000) THEN
+        SET customerLevel = 'GOLD';
+    ELSEIF credit < 10000 THEN
+        SET customerLevel = 'SILVER';
+    END IF;
+	-- return the customer level
+	RETURN (customerLevel);
+END$$
+DELIMITER ;
+
+
+Calling a stored function in an SQL statement
+The following statement uses the CustomerLevel stored function:
+
+SELECT 
+    customerName, 
+    CustomerLevel(creditLimit)
+FROM
+    customers
+ORDER BY 
+    customerName;
+
+----------------------------------------------Calling a stored function in a stored procedure
+
+The following statement creates a new stored procedure that calls the CustomerLevel() stored function:
+
+DELIMITER $$
+
+CREATE PROCEDURE GetCustomerLevel(
+    IN  customerNo INT,  
+    OUT customerLevel VARCHAR(20)
+)
+BEGIN
+
+	DECLARE credit DEC(10,2) DEFAULT 0;
+    
+    -- get credit limit of a customer
+    SELECT 
+		creditLimit 
+	INTO credit
+    FROM customers
+    WHERE 
+		customerNumber = customerNo;
+    
+    -- call the function 
+    SET customerLevel = CustomerLevel(credit);
+END$$
+
+--------------
+DELIMITER $$
+
+CREATE PROCEDURE GetCustomerLevel(
+    IN  customerNo INT,  
+    OUT customerLevel VARCHAR(20)
+)
+BEGIN
+
+	DECLARE credit DEC(10,2) DEFAULT 0;
+    
+    -- get credit limit of a customer
+    SELECT 
+		creditLimit 
+	INTO credit
+    FROM customers
+    WHERE 
+		customerNumber = customerNo;
+    
+    -- call the function 
+    SET customerLevel = CustomerLevel(credit);
+END$$
+
+DELIMITER ;
+
+CALL GetCustomerLevel(-131,@customerLevel);
+SELECT @customerLevel;
+
+
+
+#-----------------------------------MySQL Stored Procedures That Return Multiple Values------------------------------------------------
+
+how to develop stored procedures that return multiple values--
+
+MySQL stored function returns only one value. To develop stored programs that return multiple values, you need to use stored procedures with INOUT or OUT parameters.
+
+The following stored procedure accepts customer number and returns the total number of orders that were shipped, canceled, resolved, and disputed.
+
+DELIMITER $$
+
+CREATE PROCEDURE get_order_by_cust(
+	IN cust_no INT,
+	OUT shipped INT,
+	OUT canceled INT,
+	OUT resolved INT,
+	OUT disputed INT)
+BEGIN
+		-- shipped
+		SELECT
+            count(*) INTO shipped
+        FROM
+            orders
+        WHERE
+            customerNumber = cust_no
+                AND status = 'Shipped';
+
+		-- canceled
+		SELECT
+            count(*) INTO canceled
+        FROM
+            orders
+        WHERE
+            customerNumber = cust_no
+                AND status = 'Canceled';
+
+		-- resolved
+		SELECT
+            count(*) INTO resolved
+        FROM
+            orders
+        WHERE
+            customerNumber = cust_no
+                AND status = 'Resolved';
+
+		-- disputed
+		SELECT
+            count(*) INTO disputed
+        FROM
+            orders
+        WHERE
+            customerNumber = cust_no
+                AND status = 'Disputed';
+
+END
+
+
+call get_order_by_cust(141,@shipped,@canceled,@resolved,@disputed);
+select @shipped,@canceled,@resolved,@disputed;
+
+
+#------------------------------------------Trigger---------------------------
+
+In MySQL, a trigger is a stored program invoked automatically in response to an event such as insert, update, or delete that occurs in the associated table. 
+For example, you can define a trigger that is invoked automatically before a new row is inserted into a table.
+
+MySQL supports triggers that are invoked in response to the INSERT, UPDATE or DELETE event.
+
+The SQL standard defines two types of triggers: row-level triggers and statement-level triggers.
+
+A row-level trigger is activated for each row that is inserted, updated, or deleted.  For example, if a table has 100 rows inserted, updated, or deleted, 
+the trigger is automatically invoked 100 times for the 100 rows affected.
+A statement-level trigger is executed once for each transaction regardless of how many rows are inserted, updated, or deleted.
+MySQL supports only row-level triggers. It doesn’t support statement-level triggers.
+
+Advantages of triggers
+Triggers provide another way to check the integrity of data.
+Triggers handle errors from the database layer.
+Triggers give an alternative way to run scheduled tasks. By using triggers, you don’t have to wait for the scheduled events to run because the triggers are invoked automatically before or after a change is made to the data in a table.
+Triggers can be useful for auditing the data changes in tables.
+Disadvantages of triggers
+Triggers can only provide extended validations, not all validations. For simple validations, you can use the NOT NULL, UNIQUE, CHECK and FOREIGN KEY constraints.
+Triggers can be difficult to troubleshoot because they execute automatically in the database, which may not invisible to the client applications.
+Triggers may increase the overhead of the MySQL Server.
+Managing MySQL triggers
+Create triggers  – describe steps of how to create a trigger in MySQL.
+Drop triggers – show you how to drop a trigger.
+Create a BEFORE INSERT trigger – show you how to create a BEFORE INSERT trigger to maintain a summary table from another table.
+Create an AFTER INSERT trigger – describe how to create an AFTER INSERT trigger to insert data into a table after inserting data into another table.
+Create a BEFORE UPDATE trigger – learn how to create a BEFORE UPDATE trigger that validates data before it is updated to the table.
+Create an AFTER UPDATE trigger – show you how to create an AFTER UPDATE trigger to log the changes of data in a table.
+Create a BEFORE DELETE trigger – show how to create a BEFORE DELETE trigger.
+Create an AFTER DELETE trigger – describe how to create an AFTER DELETE trigger.
+Create multiple triggers for a table that have the same trigger event and time – MySQL 8.0 allows you to define multiple triggers for a table that have the same trigger event and time.
+Show triggers – list triggers in a database, table by specific patterns.
+
+CREATE TRIGGER trigger_name
+{BEFORE | AFTER} {INSERT | UPDATE| DELETE }
+ON table_name FOR EACH ROW
+trigger_body;
+
+
+CREATE TABLE employees_audit (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employeeNumber INT NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    changedat DATETIME DEFAULT NULL,
+    action VARCHAR(50) DEFAULT NULL
+);
+
+Next, create a BEFORE UPDATE trigger that is invoked before a change is made to the employees table.
+
+create trigger before_employee_update
+before update on employees 
+for each row 
+insert into employees_audit
+set action="update",
+employeeNumber=OLD.employeeNumber,
+lastname=OLD.lastname,
+changedat=NOW();
+
+
+UPDATE employees 
+SET 
+    lastName = 'Phan'
+WHERE
+    employeeNumber = 1056;
+    
+SELECT * FROM employees_audit;
+
+----
+CREATE TABLE billings (
+    billingNo INT AUTO_INCREMENT,
+    customerNo INT,
+    billingDate DATE,
+    amount DEC(10 , 2 ),
+    PRIMARY KEY (billingNo)
+);
+
+DELIMITER $$
+CREATE TRIGGER before_billing_update
+    BEFORE UPDATE 
+    ON billings FOR EACH ROW
+BEGIN
+    IF new.amount > old.amount * 10 THEN
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = 'New amount cannot be 10 times greater than the current amount.';
+    END IF;
+END$$    
+DELIMITER ;
+
+
+------------------------------------
+
+Introduction to MySQL BEFORE INSERT triggers
+MySQL BEFORE INSERT triggers are automatically fired before an insert event occurs on the table.
+
+The following illustrates the basic syntax of creating a MySQL BEFORE INSERT trigger:
+
+CREATE TRIGGER trigger_name
+    BEFORE INSERT
+    ON table_name FOR EACH ROW
+trigger_body;
+
+In this syntax:
+
+First, specify the name of the trigger that you want to create in the CREATE TRIGGER clause.
+
+Second, use BEFORE INSERT clause to specify the time to invoke the trigger.
+
+Third, specify the name of the table that the trigger is associated with after the ON keyword.
+
+Finally, specify the trigger body which contains one or more SQL statements that execute when the trigger is invoked.
+
+If you have multiple statements in the trigger_body, you have to use the BEGIN END block and change the default delimiter:
+
+DELIMITER $$
+
+CREATE TRIGGER trigger_name
+    BEFORE INSERT
+    ON table_name FOR EACH ROW
+BEGIN
+    -- statements
+END$$    
+
+DELIMITER ;
+Code language: SQL (Structured Query Language) (sql)
+Note that in a BEFORE INSERT trigger, you can access and change the NEW values. 
+However, you cannot access the OLD values because OLD values obviously do not exist.
+
+DROP TABLE IF EXISTS WorkCenters;
+
+CREATE TABLE WorkCenters (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    capacity INT NOT NULL
+);
+
+Second, create another table called WorkCenterStats that stores the summary of the capacity of the work centers:
+
+DROP TABLE IF EXISTS WorkCenterStats;
+
+CREATE TABLE WorkCenterStats(
+    totalCapacity INT NOT NULL
+);
+
+DROP TABLE IF EXISTS WorkCenterStats;
+
+CREATE TABLE WorkCenterStats(
+    totalCapacity INT NOT NULL
+);
+
+Now,creating before insert trigger example.--
+
+DELIMITER $$
+
+CREATE TRIGGER before_workcenters_insert
+BEFORE INSERT
+ON WorkCenters FOR EACH ROW
+BEGIN
+    DECLARE rowcount INT;
+    
+    SELECT COUNT(*) 
+    INTO rowcount
+    FROM WorkCenterStats;
+    
+    IF rowcount > 0 THEN
+        UPDATE WorkCenterStats
+        SET totalCapacity = totalCapacity + new.capacity;
+    ELSE
+        INSERT INTO WorkCenterStats(totalCapacity)
+        VALUES(new.capacity);
+    END IF; 
+
+END $$
+
+DELIMITER ;
+
+
+Testing the MySQL BEFORE INSERT trigger
+First, insert a new row into the WorkCenter table:
+
+Testing the MySQL BEFORE INSERT trigger
+First, insert a new row into the WorkCenter table:
+
+INSERT INTO WorkCenters(name, capacity)
+VALUES('Mold Machine',100);
+Code language: SQL (Structured Query Language) (sql)
+Second, query data from the WorkCenterStats table:
+
+SELECT * FROM WorkCenterStats;    
+Code language: SQL (Structured Query Language) (sql)
+
+The trigger has been invoked and inserted a new row into the WorkCenterStats table.
+
+Third, insert a new work center:
+
+INSERT INTO WorkCenters(name, capacity)
+VALUES('Packing',200);
+Code language: SQL (Structured Query Language) (sql)
+Finally, query data from the WorkCenterStats:
+
+SELECT * FROM WorkCenterStats;
+Code language: SQL (Structured Query Language) (sql)
+MySQL BEFORE INSERT Trigger Example 2
+The trigger has updated the total capacity from 100 to 200 as expected.
+
+Note that to properly maintain the summary table WorkCenterStats, you should also create triggers to handle update and delete events on the WorkCenters table.
+
+In this tutorial, you have learned how to create a MySQL BEFORE INSERT trigger to maintain a summary table of another table.
+
+
+#------------------ MySQL AFTER INSERT Trigger---------------------------------
+
+DROP TABLE IF EXISTS members;
+
+CREATE TABLE members (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255),
+    birthDate DATE,
+    PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS reminders;
+
+CREATE TABLE reminders (
+    id INT AUTO_INCREMENT,
+    memberId INT,
+    message VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id , memberId)
+);
+
+DELIMITER $$
+
+CREATE TRIGGER after_members_insert
+AFTER INSERT
+ON members FOR EACH ROW
+BEGIN
+    IF NEW.birthDate IS NULL THEN
+        INSERT INTO reminders(memberId, message)
+        VALUES(new.id,CONCAT('Hi ', NEW.name, ', please update your date of birth.'));
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+
+Testing the MySQL AFTER INSERT trigger
+First, insert two rows into the members table:
+
+INSERT INTO members(name, email, birthDate)
+VALUES
+    ('John Doe', 'john.doe@example.com', NULL),
+    ('Jane Doe', 'jane.doe@example.com','2000-01-01');
+
+select * from members;
+
+select * from reminders;
+
+
+
+#------------------------------- Introduction to MySQL BEFORE UPDATE triggers
+
+
+Introduction to MySQL BEFORE UPDATE triggers----
+
+DROP TABLE IF EXISTS sales;
+
+CREATE TABLE sales (
+    id INT AUTO_INCREMENT,
+    product VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL DEFAULT 0,
+    fiscalYear SMALLINT NOT NULL,
+    fiscalMonth TINYINT NOT NULL,
+    CHECK(fiscalMonth >= 1 AND fiscalMonth <= 12),
+    CHECK(fiscalYear BETWEEN 2000 and 2050),
+    CHECK (quantity >=0),
+    UNIQUE(product, fiscalYear, fiscalMonth),
+    PRIMARY KEY(id)
+);
+
+INSERT INTO sales(product, quantity, fiscalYear, fiscalMonth)
+VALUES
+    ('2003 Harley-Davidson Eagle Drag Bike',120, 2020,1),
+    ('1969 Corvair Monza', 150,2020,1),
+    ('1970 Plymouth Hemi Cuda', 200,2020,1);
+
+SELECT * FROM sales;
+
+
+DELIMITER $$
+
+CREATE TRIGGER before_sales_update
+BEFORE UPDATE
+ON sales FOR EACH ROW
+BEGIN
+    DECLARE errorMessage VARCHAR(255);
+    SET errorMessage = CONCAT('The new quantity ',
+                        NEW.quantity,
+                        ' cannot be 3 times greater than the current quantity ',
+                        OLD.quantity);
+                        
+    IF new.quantity > old.quantity * 3 THEN
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = errorMessage;
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+Testing the MySQL BEFORE UPDATE trigger
+First, update the quantity of the row with id 1 to 150:
+
+
+
+update sales set quantity=150 where id=1; 
+update sales set quantity=500 where id=1; 
+
+#----------------------mysql after update-------------
+
+DROP TABLE IF EXISTS Sales;
+
+CREATE TABLE Sales (
+    id INT AUTO_INCREMENT,
+    product VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL DEFAULT 0,
+    fiscalYear SMALLINT NOT NULL,
+    fiscalMonth TINYINT NOT NULL,
+    CHECK(fiscalMonth >= 1 AND fiscalMonth <= 12),
+    CHECK(fiscalYear BETWEEN 2000 and 2050),
+    CHECK (quantity >=0),
+    UNIQUE(product, fiscalYear, fiscalMonth),
+    PRIMARY KEY(id)
+);
+INSERT INTO Sales(product, quantity, fiscalYear, fiscalMonth)
+VALUES
+    ('2001 Ferrari Enzo',140, 2021,1),
+    ('1998 Chrysler Plymouth Prowler', 110,2021,1),
+    ('1913 Ford Model T Speedster', 120,2021,1);
+
+DROP TABLE IF EXISTS SalesChanges;
+
+CREATE TABLE SalesChanges (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    salesId INT,
+    beforeQuantity INT,
+    afterQuantity INT,
+    changedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+DELIMITER $$
+
+CREATE TRIGGER after_sales_update
+AFTER UPDATE
+ON sales FOR EACH ROW
+BEGIN
+    IF OLD.quantity <> new.quantity THEN
+        INSERT INTO SalesChanges(salesId,beforeQuantity, afterQuantity)
+        VALUES(old.id, old.quantity, new.quantity);
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+UPDATE Sales 
+SET quantity = 350
+WHERE id = 1;
+
+select * from SalesChanges;
+
+UPDATE Sales 
+SET quantity = CAST(quantity * 1.1 AS UNSIGNED);
+
+SELECT * FROM SalesChanges;
+
+
+#-------------------before delete example-----------------
+
+DROP TABLE IF EXISTS Salaries;
+
+CREATE TABLE Salaries (
+    employeeNumber INT PRIMARY KEY,
+    validFrom DATE NOT NULL,
+    amount DEC(12 , 2 ) NOT NULL DEFAULT 0
+);
+
+INSERT INTO salaries(employeeNumber,validFrom,amount)
+VALUES
+    (1002,'2000-01-01',50000),
+    (1056,'2000-01-01',60000),
+    (1076,'2000-01-01',70000);
+
+Third, create a table that stores the deleted salary:
+
+DROP TABLE IF EXISTS SalaryArchives;    
+
+CREATE TABLE SalaryArchives (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    employeeNumber INT PRIMARY KEY,
+    validFrom DATE NOT NULL,
+    amount DEC(12 , 2 ) NOT NULL DEFAULT 0,
+    deletedAt TIMESTAMP DEFAULT NOW()
+);
+
+DELIMITER $$
+
+CREATE TRIGGER before_salaries_delete
+BEFORE DELETE
+ON salaries FOR EACH ROW
+BEGIN
+    INSERT INTO SalaryArchives(employeeNumber,validFrom,amount)
+    VALUES(OLD.employeeNumber,OLD.validFrom,OLD.amount);
+END$$    
+
+DELIMITER ;
+
+
+DELETE FROM salaries 
+WHERE employeeNumber = 1002;
+
+SELECT * FROM SalaryArchives;    
+
+create table date_demo(d date default now());
+insert into date_demo values();
+select * from date_demo;
+
+create table time_demo(d timestamp default now());
+insert into time_demo values();
+select * from time_demo;
+
+DELETE FROM salaries;
+
+
+#-------------------- after trigger----------------------
+
+DROP TABLE IF EXISTS Salaries;
+
+CREATE TABLE Salaries (
+    employeeNumber INT PRIMARY KEY,
+    salary DECIMAL(10,2) NOT NULL DEFAULT 0
+);
+
+
+INSERT INTO Salaries(employeeNumber,salary)
+VALUES
+    (1002,5000),
+    (1056,7000),
+    (1076,8000);
+
+DROP TABLE IF EXISTS SalaryBudgets;
+
+CREATE TABLE SalaryBudgets(
+    total DECIMAL(15,2) NOT NULL
+);
+
+INSERT INTO SalaryBudgets(total)
+SELECT SUM(salary) 
+FROM Salaries;
+
+select * from Salaries;
+
+CREATE TRIGGER after_salaries_delete
+AFTER DELETE
+ON Salaries FOR EACH ROW
+UPDATE SalaryBudgets 
+SET total = total - old.salary;
+
+DELETE FROM Salaries
+WHERE employeeNumber = 1002;
+
+SELECT * FROM SalaryBudgets;    
+
+
+Creating multiple triggers----
+
+In this tutorial you will learn how to create multiple triggers for a table that have the same event and action time.
+Applicable only after 5.7.2+  allowed you to create multiple triggers for a given table that have the same event and action time. 
+These triggers will activate sequentially when an event occurs.
+
+DELIMITER $$
+
+CREATE TRIGGER trigger_name
+{BEFORE|AFTER}{INSERT|UPDATE|DELETE} 
+ON table_name FOR EACH ROW 
+{FOLLOWS|PRECEDES} existing_trigger_name
+BEGIN
+    -- statements
+END$$
+
+DELIMITER ;
+
+In this syntax, the FOLLOWS or PRECEDES specifies whether the new trigger should be invoked before or after an existing trigger.
+
+The FOLLOWS  allows the new trigger to activate after an existing trigger.
+The PRECEDES  allows the new trigger to activate before an existing trigger.
+
+#--How To Call a Stored Procedure From a Trigger in MySQL---
+
+MySQL allows you to call a stored procedure from a trigger by using the CALL statement. By doing this, you can reuse the same stored procedure in several triggers.
+
+However, the trigger cannot call a stored procedure that has OUT or INOUT parameters or a stored procedure that uses dynamic SQL.
+
+DROP TABLE IF EXISTS accounts;
+
+CREATE TABLE accounts (
+    accountId INT AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    amount DECIMAL(10 , 2 ) NOT NULL ,
+    PRIMARY KEY (accountId),
+    CHECK(amount >= 0) 
+);
+
+INSERT INTO accounts(name, amount)
+VALUES
+    ('John Doe', 1000),
+    ('Jane Bush', 500);
+
+DELIMITER $$
+
+CREATE PROCEDURE Withdraw(
+    fromAccountId INT, 
+    withdrawAmount DEC(10,2)
+)
+BEGIN
+    IF withdrawAmount <= 0 THEN
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = 'The withdrawal amount must be greater than zero';
+    END IF;
+    
+    UPDATE accounts 
+    SET amount = amount - withdrawAmount
+    WHERE accountId = fromAccountId;
+END$$
+
+DELIMITER ;
+
+
+Create a stored procedure that checks the withdrawal
+The following statement creates a stored procedure that checks the withdrawal from an account:
+
+DELIMITER $$
+
+CREATE PROCEDURE CheckWithdrawal(
+    fromAccountId INT,
+    withdrawAmount DEC(10,2)
+)
+BEGIN
+    DECLARE balance DEC(10,2);
+    DECLARE withdrawableAmount DEC(10,2);
+    DECLARE message VARCHAR(255);
+
+    -- get current balance of the account
+    SELECT amount 
+    INTO balance
+    FROM accounts
+    WHERE accountId = fromAccountId;
+    
+    -- Set minimum balance
+    SET withdrawableAmount = balance - 25;
+
+    IF withdrawAmount > withdrawableAmount THEN
+        SET message = CONCAT('Insufficient amount, the maximum withdrawable is ', withdrawableAmount);
+        SIGNAL SQLSTATE '45000' 
+            SET MESSAGE_TEXT = message;
+    END IF;
+END$$
+
+DELIMITER ;
+Code language: SQL (Structured Query Language) (sql)
+In this stored procedure:
+
+First, get the current balance of the account.
+Second, set the withdrawable amount. The minimum balance of the account must be 25.
+Third, raise an error if the withdrawal amount is greater than the withdrawable amount.
+
+Create a trigger that calls a stored procedure
+The following statement creates a BEFORE UPDATE trigger that calls the stored procedure CheckWithdrawal:
+
+DELIMITER $$
+
+CREATE TRIGGER before_accounts_update
+BEFORE UPDATE
+ON accounts FOR EACH ROW
+BEGIN
+    CALL CheckWithdrawal (
+        OLD.accountId, 
+        OLD.amount - NEW.amount
+    );
+END$$
+
+DELIMITER ;
+
+Testing the transactions
+First, withdraw 400 from the account id 1:
+
+CALL withdraw(1, 400);
+SELECT * FROM accounts
+WHERE accountId = 1;
+
+CALL withdraw(1, 600);
+CALL withdraw(1, 575);
+
+SELECT * 
+FROM accounts
+WHERE accountId = 1;
+
+
+
