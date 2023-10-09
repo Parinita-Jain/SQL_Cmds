@@ -1,0 +1,13 @@
+create database school;
+use school;
+drop table if exists emp;
+create table emp(eid int primary key auto_increment, name varchar(20),sal int,dept varchar(20),doj date);
+insert into emp values
+(1,"Harry",50000,"IT","2017-05-13"),
+(2,"Mac",45000,"HR","2016-02-12"),
+(3,"Rox",60000,"Support","2015-05-12"),
+(4,"Shree",90000,"IT","2018-02-01"),
+(5,"Ramesh",50000,"IT","2018-05-13"),
+(6,"Seema",32000,"HR","2019-02-12"),
+(7,"Purvika",40000,"IT","2018-07-12"),
+(8,"Shreepal",51000,"production","2017-05-25");
