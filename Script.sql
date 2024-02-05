@@ -100,6 +100,14 @@ select * from student_demo where marks<90 and marks>50;
 select * from student_demo where marks>50 and marks<90;
 select * from student_demo where marks between 50 and 90;
 
+select roll,
+case 
+    when marks<100 and marks>75 then "Very Good"
+    when marks<75 and marks>60 then " Good"
+    when marks<60 and marks>35 then " Nice"
+    else "Fail"
+end as "Result"
+from student_demo;
 #select * from student_demo where marks between 90 and 50;
 select * from student_demo where roll=1 or roll=2;
 
@@ -455,6 +463,7 @@ select date_format(sysdate(),'%W');
 select date_format(sysdate(),'%a');
 select date_format(sysdate(),'%D');
 select date_format(sysdate(),'%D of the %M %Y,%W') as Date;
+#17th of the May 2023,Wednesday
 
 select date_format(sysdate(),'%h:%i:%s %p');
 
@@ -604,6 +613,11 @@ insert into department_j values('d1',"HR",1),("d2","IT",2),("d3","Marketing",4);
 select dept_name from department_j where dept="d3";
 
 select emp_add from employee_j where emp_name="varun";
+
+
+#Write a query to find emp_name of a employee who is working in “HR” department?
+
+
 
 select employee_j.emp_no,employee_j.emp_name,employee_j.emp_add,
 department_j.dept,department_j.dept_name,department_j.emp_no 
