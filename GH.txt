@@ -1,0 +1,22 @@
+drop database if exists gh;
+create database gh;
+use gh;
+
+create table cust_gh(
+id int,fname varchar(20),lname varchar(20),age int,
+country varchar(20)
+);
+
+insert into cust_gh values
+(1,"John","Doe",31,"USA"),
+(2,"Robert","Luna",22,"USA"),
+(3,"David","Robin",22,"UK"),
+(4,"John","Rain",25,"UK"),
+(5,"Betty","Doe",28,"UAE"),
+(6,"Alice","Wonderland",18,"USA"),
+(7,"John","Wick",60,"UK"),
+(8,"Andrew","Tate",45,"Romania"),
+(9,"Elena","Calyas",28,"Romania"),
+(10,"Ronaldo","Christiano",35,"UAE"),
+(11,"Linoel","Messi",35,"Argentina"),
+(12,"Kylian","Mbappe",23,"France");
