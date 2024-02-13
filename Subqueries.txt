@@ -2,6 +2,9 @@ drop database if exists new_data_gh;
 create database new_data_gh;
 use new_data_gh;
 
+
+drop table if exists cust_gh;
+
 create table cust_gh(
 id int,fname varchar(20),lname varchar(20),age int,
 country varchar(20)
@@ -22,6 +25,8 @@ insert into cust_gh values
 (12,"Kylian","Mbappe",23,"France");
 #---------------------------------------------------
 
+
+drop table if exists employee_sq;
 
 # subqueries with select ,update ,delete and insert
 
@@ -72,3 +77,41 @@ create table department_j(dept varchar(20),dept_name varchar(20),emp_no int,
 foreign key(emp_no) references employee_j(emp_no));
 
 insert into department_j values('d1',"HR",1),("d2","IT",2),("d3","Marketing",4);
+
+
+drop table if exists student_j;
+
+#self join
+create table student_j
+(s_id varchar(20),c_id varchar(20),from_year varchar(10));
+
+insert into student_j values ("s1","c1","2016"),
+("s2","c2","2017"),("s1","c2","2017");
+
+
+#----------------------------------
+
+
+drop table if exists products;
+
+create table products(prod_id int,prod_name varchar(20),prod_price int,prod_type varchar(20));
+insert into products values(201,"Jewellery",1100,"Luxury"),(202,"Tshirt",300,"Non-Luxury"),
+(203,"Laptop",1300,"Luxury"),(204,"Table",400,"Non-Luxury");
+
+
+
+drop table if exists orders;
+
+create table orders(id int,prod_sold varchar(20),selling_price int);
+
+
+#---------------------------
+
+drop table if exists teacher;
+
+create table teacher(id int,age int);
+insert into teacher values(1,43),(2,35),(3,33),(4,30);
+
+drop table if exists student;
+create table student(sid int,sage int);
+insert into student values(1,28),(2,30),(3,31),(4,27);
