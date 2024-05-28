@@ -272,6 +272,27 @@ select * from d_c;
 
 #------------------------28-2-------------------------------
 # foreign key constraints----
+A foreign key constraint is a key concept in relational databases.
+    It establishes a relationship between two tables by ensuring 
+    that the value in a column (or a group of columns) in one table 
+    matches the value in a column in another table. 
+    The table with the foreign key is referred to as the child table, 
+    and the table containing the candidate key is referred to as the parent table.
+
+Purpose of Foreign Key Constraints
+Data Integrity: Ensures that the value in the child table corresponds to an existing value in the parent table.
+Cascading Actions: Supports operations such as cascading deletes 
+    or updates, which maintain consistency across related tables.
+    
+Foreign key constraints are essential for maintaining data integrity and defining relationships 
+    between tables in a relational database. They ensure that the values in the child table 
+    correspond to existing values in the parent table and 
+    can support cascading actions to keep data consistent. 
+    By understanding and using foreign key constraints, 
+    you can design robust and reliable database schemas.
+
+
+    
 create table customer_fk
 (id int not null,
 name varchar(20),
