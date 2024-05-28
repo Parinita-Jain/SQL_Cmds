@@ -338,6 +338,9 @@ select name from d_c where id=1;
 create index n_i on d_c(name);
 select name from d_c where id=1;
 
+show index from default_c;
+drop index i_def on default_C;
+
 #-------------------------------------------------------------3-8---------------------------------
 create table product_demo
 ( id int,
